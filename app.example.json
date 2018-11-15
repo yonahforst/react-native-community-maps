@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "YourAppName",
+    "slug": "your-app-slug",
+    "privacy": "public",
+    "sdkVersion": "31.0.0",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "cover"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "bundleIdentifier": "your.bundle.id",
+      "buildNumber": "1"
+    },
+    "android": {
+      "package": "your.package.id"
+    }
+
+  }
+}
