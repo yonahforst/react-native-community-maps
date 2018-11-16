@@ -1,4 +1,5 @@
 import React from 'react';
+import { Header } from 'react-navigation';
 
 import { 
   StyleSheet, 
@@ -8,6 +9,7 @@ import {
   Dimensions,
   Modal,
   KeyboardAvoidingView,
+  Platform
 } from 'react-native';
 
 import {
@@ -118,6 +120,7 @@ export default class ItemScreen extends React.Component {
 
     return (
       <KeyboardAvoidingView 
+      keyboardVerticalOffset = {Header.HEIGHT + 20}
       behavior='padding'
       style={styles.container}>
         <TouchableHighlight

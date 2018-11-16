@@ -31,7 +31,6 @@ export default class CameraView extends React.Component {
   snap = async () => {
     if (this.camera) {
       const picture = await this.camera.takePictureAsync({
-        quality: 0.5,
         exif: true,
       });
       
@@ -76,6 +75,7 @@ export default class CameraView extends React.Component {
       style={styles.container}
       ratio='1:1'
       pictureSize='Medium'
+      flashMode='auto'
       ref={ref => this.camera = ref } >
         <TouchableHighlight 
         onPress={this.snap}

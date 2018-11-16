@@ -17,8 +17,6 @@ import {
   itemEmoji,
   userZoomEmoji,
 } from '../lib/options'
-console.log(itemEmoji)
-console.log(userZoomEmoji)
 
 const DELTA = 0.001
 
@@ -30,7 +28,6 @@ export default class App extends React.Component {
   async componentDidMount() {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status !== 'granted') return
-
     this.locationUnsubscribe = Location.watchPositionAsync({}, this.onUserLocationChange)
   }
 
@@ -129,8 +126,7 @@ export default class App extends React.Component {
         ref={r => this.mapRef = r}
         style={styles.map} 
         showsUserLocation={true}
-        showsPointsOfInterest={false}
-        onUserLocationChange={this.onUserLocationChange}>
+        showsPointsOfInterest={false}>
           { Object.keys(items).map(this.renderMarker) }
         </MapView>
 
