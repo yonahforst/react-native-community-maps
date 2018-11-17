@@ -120,7 +120,7 @@ export default class ItemScreen extends React.Component {
 
     return (
       <KeyboardAvoidingView 
-      keyboardVerticalOffset = {Header.HEIGHT + 20}
+      keyboardVerticalOffset={ Platform.OS === 'android' ? Header.HEIGHT + 20 : null }
       behavior='padding'
       style={styles.container}>
         <TouchableHighlight
