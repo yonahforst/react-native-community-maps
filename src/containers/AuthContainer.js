@@ -1,5 +1,9 @@
 import React from 'react';
 
+import {
+  AppLoading
+} from 'expo'
+
 import { 
   auth,
   db,
@@ -22,9 +26,13 @@ export default class AuthContainer extends React.Component {
 
   componentDidMount() {
     this.firebaseUnsubscribe = auth.onAuthStateChanged(currentUser => {
-      this.setState({ currentUser })
+      this.setState({ 
+        currentUser,
+        isReady: true, 
+      })
     })
   }
+  
 
   componentWillUnmount() {
     this.firebaseUnsubscribe && this.firebaseUnsubscribe()
@@ -130,8 +138,16 @@ export default class AuthContainer extends React.Component {
   }
 
   render() {
+    const {
+      isReady,
+      currentUser,
+    } = this.state
 
-    if (!this.state.currentUser)
+    if (!isReady)
+      return <AppLoading />
+
+
+    if (!currentUser)
       return (
         <Login
         {...this.state}
