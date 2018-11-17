@@ -144,6 +144,7 @@ export default class ItemScreen extends React.Component {
 
         <Modal
         animationType='fade'
+        onRequestClose={this.onToggleModal}
         visible={shouldShowModal}>
           <ImageZoom 
           cropWidth={width}

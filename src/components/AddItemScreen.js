@@ -129,23 +129,21 @@ export default class AddItemScreen extends React.Component {
         <CameraView
         style={styles.camera} 
         onSetPicture={this.onSetPicture}/>
-
-        <MapView 
-        style={styles.map} 
-        initialRegion={initialRegion}
-        showsPointsOfInterest={false}
-        zoomEnabled={false}
-        pitchEnabled={false}
-        onRegionChangeComplete={this.onRegionChangeComplete}>
-
+        <View
+        style={styles.mapContainer}>
+          <MapView 
+          style={styles.map} 
+          initialRegion={initialRegion}
+          showsPointsOfInterest={false}
+          zoomEnabled={false}
+          pitchEnabled={false}
+          onRegionChangeComplete={this.onRegionChangeComplete}/>
           <Text 
           style={styles.emoji}
           onPress={this.toggleEmojiPicker}>
             {emoji}
           </Text>
-
-        </MapView>
-
+        </View>            
         <EmojiOverlay 
         style={styles.emojiPicker}
         visible={!noEmojiPicker && showEmojiPicker}
@@ -161,11 +159,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  map: {
+  mapContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  map: {
+    ...StyleSheet.absoluteFill,
+  },  
   camera: {
     flex: 1,
   },

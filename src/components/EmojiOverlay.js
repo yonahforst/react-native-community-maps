@@ -19,6 +19,7 @@ export default ({
   <Modal
   transparent
   animationType='slide'
+  onRequestClose={onTapOutside}
   visible={visible}>
     <TouchableOpacity 
     style={styles.container}
