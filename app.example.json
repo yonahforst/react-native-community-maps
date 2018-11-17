@@ -23,7 +23,11 @@
     ],
     "ios": {
       "bundleIdentifier": "your.bundle.id",
-      "buildNumber": "1"
+      "buildNumber": "1",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Upload pictures of what you find",
+        "NSLocationWhenInUseUsageDescription": "Tell users where you took the picture"
+      }
     },
     "android": {
       "package": "your.package.id"
