@@ -5,6 +5,8 @@ import {
   View,
   TouchableHighlight,
   ActivityIndicator,
+  Alert,
+  Linking,
 } from 'react-native';
 
 import { 
@@ -27,6 +29,10 @@ export default class App extends React.Component {
 
   async componentDidMount() {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    this.setState({
+      permissionStatus: status,
+    })
+
     if (status !== 'granted') return
     this.locationUnsubscribe = Location.watchPositionAsync({}, this.onUserLocationChange)
   }
@@ -72,11 +78,18 @@ export default class App extends React.Component {
 
   zoomToUser = () => {
     const {
-      userCoordinates
+      userCoordinates,
+      permissionStatus,
     } = this.state
 
-    if (!userCoordinates) return 
+    if (permissionStatus !== 'granted') {
+      this.alertPermissions()
+      return 
+    }
 
+    if (!userCoordinates)
+      return
+      
     this.zoomToCoordinates(userCoordinates)
   }
 
@@ -93,11 +106,34 @@ export default class App extends React.Component {
   onAddItem = () => {
     const {
       userCoordinates,
+      permissionStatus,
     } = this.state
+
+    if (permissionStatus !== 'granted') {
+      this.alertPermissions()
+      return 
+    }
+
+    if (!userCoordinates)
+      return
 
     this.props.navigation.navigate('AddItemScreen', { 
       coordinates: userCoordinates
     })
+  }
+
+  alertPermissions = () => {
+    Alert.alert(
+      'Location permissions', 
+      'Oops! we need your location first. Go to settings to enable it',
+      [{ 
+          text: 'Cancel', 
+          type: 'cancel',
+        }, { 
+          text: 'Open Settings', 
+          onPress: () => Linking.openURL('app-settings:'),
+        }]
+    )
   }
 
   onShowItem = id => {
@@ -116,8 +152,6 @@ export default class App extends React.Component {
       loading,
     } = this.props
     
-    const canAddItem = !loading && !!userCoordinates
-
     return (
       <View
       style={styles.container}> 
@@ -135,7 +169,7 @@ export default class App extends React.Component {
         style={styles.buttonContainer}>
           <TouchableHighlight
           style={styles.button}
-          disabled={!canAddItem}
+          disabled={loading}
           onPress={this.onAddItem}>
             {loading 
               ? <ActivityIndicator />
@@ -148,7 +182,7 @@ export default class App extends React.Component {
 
           <TouchableHighlight
           style={styles.button}
-          disabled={loading}
+          disabled={!userCoordinates}
           onPress={this.zoomToUser}>
             <Text 
               style={styles.emoji}>
