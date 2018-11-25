@@ -95,6 +95,8 @@ export default class ItemScreen extends React.Component {
     })
   }
 
+
+
   render() {
     
     const {
@@ -107,6 +109,7 @@ export default class ItemScreen extends React.Component {
     const {
       messages,
       items,
+      users,
     } = this.props
 
     const item = items[id]
@@ -139,6 +142,7 @@ export default class ItemScreen extends React.Component {
         <Comments
         style={styles.messages}
         messages={messages}
+        users={users}
         onSubmit={this.onSendMessage}
         />
 

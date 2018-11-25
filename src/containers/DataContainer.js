@@ -30,6 +30,7 @@ const geoPointToObj = geopoint => ({
 export default class DataContainer extends React.Component {
   state = {
     items: {},
+    users: {},
     messages: [],
     loading: false,
     error: null,
@@ -41,7 +42,7 @@ export default class DataContainer extends React.Component {
     .onSnapshot(querySnapshot => {
 
       var items = {};
-      querySnapshot.forEach(doc => {
+      querySnapshot.forEach(async doc => {
         const data = doc.data()
 
         items[doc.id] = {
@@ -49,6 +50,9 @@ export default class DataContainer extends React.Component {
           coordinates: geoPointToObj(data.coordinates)
         }
       })
+
+      const ids = Object.values(items).map(m => m.userId)
+      this.loadUsers({ ids })
       
       this.setState({
           items: {
@@ -63,6 +67,21 @@ export default class DataContainer extends React.Component {
     this.firebaseUnsubscribe && this.firebaseUnsubscribe()
   }
 
+  loadUsers = async ({ ids }) => {
+    const promises = ids.map(id => db.collection('users').doc(id).get())
+    const results = await Promise.all(promises)
+    const users = {}
+    results.forEach(r => {
+      users[r.id] = r.data()
+    })
+
+    this.setState({
+      users: {
+        ...this.state.users,
+        ...users,
+      }
+    })
+  }
 
   addNewItem = async ({ emoji, coordinates, picture }) => {
     const {
@@ -152,8 +171,14 @@ export default class DataContainer extends React.Component {
 
       var messages = [];
       querySnapshot.forEach(doc => {
-        messages.push(doc.data())
+        messages.push({
+          id: doc.id,
+          ...doc.data(),
+        })
       })
+
+      const ids = messages.map(m => m.userId)
+      this.loadUsers({ ids })
       
       this.setState({
         messages
@@ -172,7 +197,6 @@ export default class DataContainer extends React.Component {
     .add({
       body,
       userId: auth.currentUser.uid,
-      displayName: auth.currentUser.displayName,
       at: Date.now(),
     })
   }

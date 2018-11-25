@@ -68,6 +68,24 @@ export default class Comments extends React.Component {
     this.listRef.scrollToEnd()
   }
 
+  renderItem = ({ item }) => {
+    const {
+      users,
+    } = this.props
+    
+    const { 
+      username='Anonymous',
+    } = users[item.userId] || {}
+
+    return (
+      <Text style={styles.displayName}>
+        { username + ': ' }
+        <Text style={styles.body}>
+          {item.body}
+        </Text>
+      </Text>
+    )
+  }
 
   render() {
     const {
@@ -86,15 +104,8 @@ export default class Comments extends React.Component {
         <FlatList
         ref={r => this.listRef = r}
         data={messages}
-        
-        renderItem={({ item }) => (
-          <Text style={styles.displayName}>
-            {(item.displayName || 'Anonymous') + ': ' }
-            <Text style={styles.body}>
-              {item.body}
-            </Text>
-          </Text>
-        )}/>
+        keyExtractor={item => item.id}
+        renderItem={this.renderItem}/>
 
         <View
         style={styles.newMessageRow}>
