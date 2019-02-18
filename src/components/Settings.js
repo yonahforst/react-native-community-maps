@@ -6,14 +6,30 @@ import {
   StyleSheet
 } from 'react-native'
 
+import Login from './Login'
+
 export default ({
   onSignOut,
+  currentUser,
+  onConvertAnonymousUser,
+  loading,
+  error,
 }) => {
   return (
   <View
   style={styles.container}>
     <View
     style={styles.container}>
+
+    { currentUser.isAnonymous &&
+        <Login
+        error={error}
+        loading={loading}
+        canLogin={false}
+        canAnonymouslyLogin={false}
+        onSignup={onConvertAnonymousUser}
+        />
+    }
 
     </View>
     <Button

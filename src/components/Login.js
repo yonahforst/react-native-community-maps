@@ -28,13 +28,9 @@ export default class Login extends React.Component {
   onLogin = () => this.props.onLogin(this.state)
   onSignup = () => this.props.onSignup(this.state)
   onAnonymousLogin = () => this.props.onAnonymousLogin()
+  onConvertAnonymousUser = () => this.props.onConvertAnonymousUser(this.state)
 
-  render() {
-    const {
-      loading,
-      error,
-    } = this.props
-
+  renderScreen() {
     const {
       screen,
       username,
@@ -45,10 +41,7 @@ export default class Login extends React.Component {
     switch (screen) {
       case 'login':
         return (
-          <View 
-          style={styles.container} 
-          behavior="padding" 
-          enabled>
+          <View>
             <TextInput 
             style={styles.input}
             value={email}
@@ -64,33 +57,12 @@ export default class Login extends React.Component {
             textContentType='password'
             placeholder='Password'
             onChangeText={password => this.setState({ password })} />
-
-            { error && <Text style={styles.error}>{ error.message }</Text> }
-
-            <Button
-            onPress={this.onLogin}
-            title='Login' />
-
-            <Button
-            onPress={this.showSignup}
-            color='grey'
-            title='Signup' />
-
-            <Button
-            onPress={this.onAnonymousLogin}
-            color='grey'
-            title='Use anonymously' />
-
-            { loading && <Loading />}
           </View>
         )
 
       case 'signup':
         return (
-          <View 
-          style={styles.container} 
-          behavior="padding" 
-          enabled>
+          <View>
             <TextInput 
             style={styles.input}
             value={email}
@@ -113,30 +85,66 @@ export default class Login extends React.Component {
             textContentType='password'
             placeholder='Password'
             onChangeText={password => this.setState({ password })} />
-
-            { error && <Text style={styles.error}>{ error.message }</Text> }
-
-            <Button
-            onPress={this.onSignup}
-            title='Signup' />
-
-            <Button
-            onPress={this.showLogin}
-            color='grey'
-            title='Login' />
-
-            <Button
-            onPress={this.onAnonymousLogin}
-            color='grey'
-            title='Use anonymously' />
-
-            { loading && <Loading />}
-
           </View>
         )
     }
+  }
+  
+  render() {
+    const {
+      loading,
+      error,
+      canLogin=true,
+      canSignup=true,
+      canAnonymouslyLogin=true,
+    } = this.props
 
+    const {
+      screen,
+    } = this.state
 
+    return (
+      <View 
+        style={styles.container} 
+        behavior="padding" 
+        enabled>
+
+        { this.renderScreen() }
+
+        { error && <Text style={styles.error}>{ error.message }</Text> }
+
+        { screen == 'login' 
+          ? <Button
+            onPress={this.onLogin}
+            title='Login' />
+          : <Button
+            onPress={this.onSignup}
+            title='Signup' />
+        }
+   
+        { screen == 'login' 
+          ? canSignup && 
+            <Button
+            onPress={this.showSignup}
+            color='grey'
+            title='Signup' />
+          : canLogin && 
+            <Button
+            onPress={this.showLogin}
+            color='grey'
+            title='Login' />            
+        }
+
+        { canAnonymouslyLogin &&
+          <Button
+          onPress={this.onAnonymousLogin}
+          color='grey'
+          title='Use anonymously' />
+        }
+
+        { loading && <Loading />}
+      </View>
+    )
   }
 }
 

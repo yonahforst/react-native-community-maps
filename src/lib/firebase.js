@@ -12,5 +12,6 @@ db.settings({
 
 export const storage = firebase.storage()
 export const auth = firebase.auth()
+export const EmailAuthProvider = Firebase.auth.EmailAuthProvider
 
 export default firebase

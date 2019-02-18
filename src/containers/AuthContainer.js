@@ -7,6 +7,7 @@ import {
 import { 
   auth,
   db,
+  EmailAuthProvider,
 } from '../lib/firebase'
 
 import Login from '../components/Login'
@@ -134,6 +135,71 @@ export default class AuthContainer extends React.Component {
     }
   }
 
+  onConvertAnonymousUser = async ({ username, email, password }) => {
+    try {
+      this.setState({ 
+        loading: true
+      })
+
+
+      if (!/^\w{6,20}$/.test(username))
+        throw new Error('Username must be 6-20 characters. Only letters, numbers, and underscores.')
+      
+      var credential = EmailAuthProvider.credential(email, password);
+      await auth.currentUser.linkAndRetrieveDataWithCredential(credential)
+      const user = auth.currentUser;
+    
+      await db.collection('users').doc(user.uid).set({
+        username
+      }, {
+        merge: true
+      })
+
+
+      this.setState({
+        loading: false,
+        error: null,
+      })
+    } catch (error) {
+      console.log(error)
+      this.setState({
+        loading: false,
+        error,
+      })
+    }
+  }
+
+  onSetUsername = async ({ username }) => {
+    try {
+      this.setState({ 
+        loading: true
+      })
+
+      if (!/^\w{6,20}$/.test(username))
+        throw new Error('Username must be 6-20 characters. Only letters, numbers, and underscores.')
+      
+      const user = auth.currentUser;
+    
+      await db.collection('users').doc(user.uid).set({
+        username
+      }, {
+        merge: true
+      })
+
+
+      this.setState({
+        loading: false,
+        error: null,
+      })
+    } catch (error) {
+      console.log(error)
+      this.setState({
+        loading: false,
+        error,
+      })
+    }
+  }
+
   render() {
     const {
       isReady,
@@ -154,7 +220,9 @@ export default class AuthContainer extends React.Component {
     return (
       <AuthContext.Provider value={{ 
         ...this.state,
+        onSetUsername: this.onSetUsername,
         onSignOut: this.onSignOut,
+        onConvertAnonymousUser: this.onConvertAnonymousUser,
       }}> 
         { this.props.children }
       </AuthContext.Provider>
