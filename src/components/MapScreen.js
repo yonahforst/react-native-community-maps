@@ -142,6 +142,10 @@ export default class App extends React.Component {
     })
   }
 
+  onShowSettings = () => {
+    this.props.navigation.navigate('Settings')
+  }
+
   render() {
     const { 
       userCoordinates,
@@ -164,31 +168,50 @@ export default class App extends React.Component {
           { Object.keys(items).map(this.renderMarker) }
         </MapView>
 
+
+  
         <View
         pointerEvents={'box-none'}
         style={styles.buttonContainer}>
-          <TouchableHighlight
-          style={styles.button}
-          disabled={loading}
-          onPress={this.onAddItem}>
-            {loading 
-              ? <ActivityIndicator />
-              : <Text 
+          <View
+          pointerEvents={'box-none'}
+          style={styles.buttonRow}>
+            <TouchableHighlight
+            style={styles.button}
+            onPress={this.onShowSettings}>
+              <Text 
                 style={styles.emoji}>
-                  { itemEmoji}
+                ⚙️
                 </Text>
-            }
-          </TouchableHighlight>
+            </TouchableHighlight>
+  
+          </View>
+          <View
+          pointerEvents={'box-none'}
+          style={styles.buttonRow}>
+            <TouchableHighlight
+            style={styles.button}
+            disabled={loading}
+            onPress={this.onAddItem}>
+              {loading 
+                ? <ActivityIndicator />
+                : <Text 
+                  style={styles.emoji}>
+                    { itemEmoji}
+                  </Text>
+              }
+            </TouchableHighlight>
 
-          <TouchableHighlight
-          style={styles.button}
-          disabled={!userCoordinates}
-          onPress={this.zoomToUser}>
-            <Text 
-              style={styles.emoji}>
-              { userZoomEmoji }
-              </Text>
-          </TouchableHighlight>
+            <TouchableHighlight
+            style={styles.button}
+            disabled={!userCoordinates}
+            onPress={this.zoomToUser}>
+              <Text 
+                style={styles.emoji}>
+                { userZoomEmoji }
+                </Text>
+            </TouchableHighlight>
+          </View>
         </View>
         
       </View>
@@ -200,13 +223,16 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-end',
   },
   map: {
    ...StyleSheet.absoluteFill,
   },
   buttonContainer: {
     margin: 20,
+    flex: 1,
+    justifyContent: 'space-between',
+  },
+  buttonRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },

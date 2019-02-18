@@ -12,6 +12,7 @@ import PushContainer from './containers/PushContainer'
 import MapScreen from './containers/MapScreen'
 import ItemScreen from './containers/ItemScreen'
 import AddTimescren from './containers/AddItemScreen'
+import Settings from './containers/Settings'
 
 const noop = () => {}
 
@@ -21,6 +22,9 @@ const Navigator = createStackNavigator({
     navigationOptions: {
       header: null,
     }
+  },
+  Settings: {
+    screen: Settings
   },
   ItemScreen: {
     screen: ItemScreen,

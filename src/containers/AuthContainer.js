@@ -11,11 +11,11 @@ import {
 
 import Login from '../components/Login'
 
-// const AuthContext = React.createContext({
-//   currentUser: null,
-//   loading: false,
-//   error: null,
-// });
+const AuthContext = React.createContext({
+  currentUser: null,
+  loading: false,
+  error: null,
+});
 
 export default class AuthContainer extends React.Component {
   state = {
@@ -40,7 +40,6 @@ export default class AuthContainer extends React.Component {
 
   onSignup = async ({ username, email, password }) => {
     try {
-
       this.setState({ 
         loading: true
       })
@@ -50,8 +49,6 @@ export default class AuthContainer extends React.Component {
 
       await auth.createUserWithEmailAndPassword(email, password)
       const user = auth.currentUser;
-
-      await user.updateProfile({ displayName: username })
     
       await db.collection('users').doc(user.uid).set({
         username
@@ -74,7 +71,7 @@ export default class AuthContainer extends React.Component {
     
   }
 
-  onLogin = async ({ username, email, password }) => {
+  onLogin = async ({ email, password }) => {
     try {
       this.setState({ 
         loading: true
@@ -146,20 +143,27 @@ export default class AuthContainer extends React.Component {
     if (!isReady)
       return <AppLoading />
 
-
     if (!currentUser)
-      return (
-        <Login
+      return <Login
         {...this.state}
         onSignup={this.onSignup}
         onLogin={this.onLogin}
         onAnonymousLogin={this.onAnonymousLogin}
         />
-      )
 
-    return React.cloneElement(this.props.children, {
-      auth: this.state,
-      onSignOut: this.onSignOut,
-    })
+    return (
+      <AuthContext.Provider value={{ 
+        ...this.state,
+        onSignOut: this.onSignOut,
+      }}> 
+        { this.props.children }
+      </AuthContext.Provider>
+    )
   }
 }
+
+export const AuthContainerHoc = (Component) => props => (
+  <AuthContext.Consumer>
+    { context => <Component { ...context }  { ...props } /> }
+  </AuthContext.Consumer>
+)
