@@ -7,7 +7,8 @@ import {
 import urlToBlob from '../lib/urlToBlob'
 
 import { 
-  db, 
+  db,
+  auth,
   storage,
 } from '../lib/firebase'
 
@@ -83,16 +84,12 @@ export default class DataContainer extends React.Component {
     })
   }
 
-  addNewItem = async ({ emoji, coordinates, picture }) => {
-    const {
-      auth
-    } = this.props
+  addNewItem = async ({ emoji, coordinates, picture }) => {    
+    this.setState({ 
+      loading: true,
+    })
 
     try {
-      this.setState({ 
-        loading: true,
-      })
-      
       const {
         uri,
       } = picture
@@ -187,10 +184,6 @@ export default class DataContainer extends React.Component {
   }
 
   sendMessage = async (id, body) => {
-    const { 
-      auth 
-    } = this.props
-
     await db.collection('rooms')
     .doc(id)
     .collection('messages')
@@ -204,13 +197,15 @@ export default class DataContainer extends React.Component {
 
   render() {
     return (
-      <DataContext.Provider value={{ 
-        ...this.state,
-        setLikes: this.setLikes,
-        setDislikes: this.setDislikes,
-        addNewItem: this.addNewItem,
-        setChatRoom: this.setChatRoom,
-        sendMessage: this.sendMessage,
+      <DataContext.Provider value={{
+        data: {
+          ...this.state,
+          setLikes: this.setLikes,
+          setDislikes: this.setDislikes,
+          addNewItem: this.addNewItem,
+          setChatRoom: this.setChatRoom,
+          sendMessage: this.sendMessage,
+        }
       }}> 
         { this.props.children }
       </DataContext.Provider>

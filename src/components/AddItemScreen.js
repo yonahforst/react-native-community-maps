@@ -101,7 +101,7 @@ export default class AddItemScreen extends React.Component {
       coordinates,
     } = this.state
 
-    this.props.addNewItem({
+    this.props.data.addNewItem({
       picture,
       emoji,
       coordinates,

@@ -1,4 +1,4 @@
-node_modules/**/*
+**/node_modules/**/*
 .expo/*
 npm-debug.*
 *.jks
@@ -11,3 +11,4 @@ npm-debug.*
 assets/**/*
 firebase-debug.log
 .firebaserc
+node_modules

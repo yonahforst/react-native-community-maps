@@ -7,7 +7,7 @@ import { createStackNavigator } from 'react-navigation';
 
 import AuthContainer from './containers/AuthContainer'
 import DataContainer from './containers/DataContainer'
-import PushContainer from './containers/PushContainer'
+import NotificationContainer from './containers/NotificationContainer'
 
 import MapScreen from './containers/MapScreen'
 import ItemScreen from './containers/ItemScreen'
@@ -48,9 +48,9 @@ const Navigator = createStackNavigator({
 export default () => (
   <AuthContainer>
     <DataContainer>
-      <PushContainer>
+      <NotificationContainer>
         <Navigator />
-      </PushContainer>
+      </NotificationContainer>
     </DataContainer>
   </AuthContainer>
 )
