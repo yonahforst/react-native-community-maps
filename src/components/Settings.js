@@ -31,14 +31,14 @@ export default class Settings extends Component {
 
   render() {
     const {
+      notification: {
+        region,
+        shouldNotify,
+        setRegion,
+        setShouldNotify,
+      },
       auth: {
         onSignOut,
-        setNotificationRegion,
-        setShouldNotify,
-        user: {
-          notificationRegion,
-          shouldNotify,
-        },
       }
     } = this.props
 
@@ -60,11 +60,11 @@ export default class Settings extends Component {
             style={styles.mapContainer}>
               <MapView 
               style={styles.map} 
-              initialRegion={notificationRegion}
+              initialRegion={region}
               showsUserLocation={true}
               zoomEnabled={true}
               showsScale={true}
-              onRegionChangeComplete={setNotificationRegion}
+              onRegionChangeComplete={setRegion}
 
               showsPointsOfInterest={false}
               showsMyLocationButton={false}
