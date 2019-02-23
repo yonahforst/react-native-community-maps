@@ -10,3 +10,4 @@ npm-debug.*
 /options.json
 assets/**/*
 .firebaserc
+node_modules

@@ -7,7 +7,8 @@ import {
 import urlToBlob from '../lib/urlToBlob'
 
 import { 
-  db, 
+  db,
+  auth,
   storage,
 } from '../lib/firebase'
 
@@ -88,10 +89,6 @@ export default class DataContainer extends React.Component {
       loading: true,
     })
 
-    const { 
-      auth
-    } = this.props
-    
     try {
       const {
         uri,
@@ -124,7 +121,7 @@ export default class DataContainer extends React.Component {
         at: Date.now(),
         picturePreview: base64,
         coordinates: new GeoPoint(latitude, longitude),
-        userId: auth.user.id,
+        userId: auth.currentUser.uid,
         likes: 1,
         dislikes: 0,
       })
@@ -187,16 +184,12 @@ export default class DataContainer extends React.Component {
   }
 
   sendMessage = async (id, body) => {
-    const { 
-      auth 
-    } = this.props
-
     await db.collection('rooms')
     .doc(id)
     .collection('messages')
     .add({
       body,
-      userId: auth.user.id,
+      userId: auth.currentUser.uid,
       at: Date.now(),
     })
   }
