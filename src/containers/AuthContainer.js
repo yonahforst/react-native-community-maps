@@ -142,6 +142,16 @@ export default class AuthContainer extends React.Component {
     }
   }
 
+  setNotificationRegion = async region => {
+    await db.collection('users')
+      .doc(auth.currentUser.uid)
+      .set({
+        notificationRegion: region ? region : null
+      }, {
+        merge: true
+      })
+  }
+
   render() {
     const {
       isReady,
