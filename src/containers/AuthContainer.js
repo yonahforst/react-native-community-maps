@@ -24,18 +24,26 @@ export default class AuthContainer extends React.Component {
     error: null,
   }
 
-  componentDidMount() {
-    this.firebaseUnsubscribe = auth.onAuthStateChanged(currentUser => {
-      this.setState({ 
-        currentUser,
-        isReady: true, 
-      })
+  componentDidMount = () => {
+    this.unsubscribeAuthState = auth.onAuthStateChanged(currentUser => {
+      this.unsubscribeUser = currentUser && db.collection('users').doc(currentUser.uid)
+        .onSnapshot(doc => {
+          this.setState({ 
+            user: {
+              id: doc.key,
+              ...doc.data(),
+            },
+            isReady: true, 
+          })
+        })
     })
   }
-  
+
+
 
   componentWillUnmount() {
-    this.firebaseUnsubscribe && this.firebaseUnsubscribe()
+    this.unsubscribeUser && this.unsubscribeUser()
+    this.unsubscribeAuthState && this.unsubscribeAuthState()
   }
 
   onSignup = async ({ username, email, password }) => {
@@ -48,6 +56,7 @@ export default class AuthContainer extends React.Component {
         throw new Error('Username must be 6-20 characters. Only letters, numbers, and underscores.')
 
       await auth.createUserWithEmailAndPassword(email, password)
+
       const user = auth.currentUser;
     
       await db.collection('users').doc(user.uid).set({
@@ -68,7 +77,6 @@ export default class AuthContainer extends React.Component {
         error,
       })
     }
-    
   }
 
   onLogin = async ({ email, password }) => {
@@ -137,13 +145,13 @@ export default class AuthContainer extends React.Component {
   render() {
     const {
       isReady,
-      currentUser,
+      user,
     } = this.state
 
     if (!isReady)
       return <AppLoading />
 
-    if (!currentUser)
+    if (!user)
       return <Login
         {...this.state}
         onSignup={this.onSignup}

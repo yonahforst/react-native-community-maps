@@ -124,7 +124,7 @@ export default class DataContainer extends React.Component {
         at: Date.now(),
         picturePreview: base64,
         coordinates: new GeoPoint(latitude, longitude),
-        userId: auth.currentUser.uid,
+        userId: auth.user.id,
         likes: 1,
         dislikes: 0,
       })
@@ -196,7 +196,7 @@ export default class DataContainer extends React.Component {
     .collection('messages')
     .add({
       body,
-      userId: auth.currentUser.uid,
+      userId: auth.user.id,
       at: Date.now(),
     })
   }
