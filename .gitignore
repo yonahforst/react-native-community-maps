@@ -9,3 +9,5 @@ npm-debug.*
 /firebase.json
 /options.json
 assets/**/*
+firebase-debug.log
+.firebaserc
