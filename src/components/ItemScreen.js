@@ -56,7 +56,9 @@ export default class ItemScreen extends React.Component {
     } = this.state
    
     const {
-      items,
+      data: {
+        items,
+      },
     } = this.props
    
     setLikes(id, items[id].likes + 1)
@@ -68,8 +70,10 @@ export default class ItemScreen extends React.Component {
     } = this.state
    
     const {
-      items,
-      setDislikes,
+      data: {
+        items,
+        setDislikes,
+      },
     } = this.props
    
     setDislikes(id, items[id].dislikes + 1)
@@ -81,7 +85,9 @@ export default class ItemScreen extends React.Component {
     } = this.state
    
     const {
-      sendMessage,
+      data: {
+        sendMessage,
+      },
     } = this.props
     
     await sendMessage(id, message)
@@ -109,9 +115,11 @@ export default class ItemScreen extends React.Component {
     if (!id) return <View/>
 
     const {
-      messages,
-      items,
-      users,
+      data: {
+        messages,
+        items,
+        users,
+      },
     } = this.props
 
     const item = items[id]
