@@ -83,16 +83,16 @@ export default class DataContainer extends React.Component {
     })
   }
 
-  addNewItem = async ({ emoji, coordinates, picture }) => {
-    const {
+  addNewItem = async ({ emoji, coordinates, picture }) => {    
+    this.setState({ 
+      loading: true,
+    })
+
+    const { 
       auth
     } = this.props
-
+    
     try {
-      this.setState({ 
-        loading: true,
-      })
-      
       const {
         uri,
       } = picture
