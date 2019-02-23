@@ -204,13 +204,15 @@ export default class DataContainer extends React.Component {
 
   render() {
     return (
-      <DataContext.Provider value={{ 
-        ...this.state,
-        setLikes: this.setLikes,
-        setDislikes: this.setDislikes,
-        addNewItem: this.addNewItem,
-        setChatRoom: this.setChatRoom,
-        sendMessage: this.sendMessage,
+      <DataContext.Provider value={{
+        data: {
+          ...this.state,
+          setLikes: this.setLikes,
+          setDislikes: this.setDislikes,
+          addNewItem: this.addNewItem,
+          setChatRoom: this.setChatRoom,
+          sendMessage: this.sendMessage,
+        }
       }}> 
         { this.props.children }
       </DataContext.Provider>

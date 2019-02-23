@@ -54,7 +54,9 @@ export default class App extends React.Component {
 
   renderMarker = id => {
     const {
-      items,
+      data: {
+        items,
+      }={},
     } = this.props
     
     const { 
@@ -150,10 +152,11 @@ export default class App extends React.Component {
     const { 
       userCoordinates,
     } = this.state
-    
     const {
-      items,
-      loading,
+      data: {
+        items,
+        loading,
+      }={},
     } = this.props
     
     return (

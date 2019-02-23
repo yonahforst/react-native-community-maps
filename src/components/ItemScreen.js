@@ -35,7 +35,9 @@ export default class ItemScreen extends React.Component {
   componentDidMount() {
     const {
       navigation,
-      setChatRoom,
+      data: {
+        setChatRoom,
+      },
     } = this.props 
 
     const id = navigation.getParam('id')

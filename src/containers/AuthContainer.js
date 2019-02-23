@@ -152,9 +152,12 @@ export default class AuthContainer extends React.Component {
         />
 
     return (
-      <AuthContext.Provider value={{ 
-        ...this.state,
-        onSignOut: this.onSignOut,
+      <AuthContext.Provider value={{
+        auth: {
+          ...this.state,
+          onSignOut: this.onSignOut,
+          setNotificationRegion: this.setNotificationRegion,
+        }
       }}> 
         { this.props.children }
       </AuthContext.Provider>
