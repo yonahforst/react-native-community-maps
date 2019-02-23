@@ -142,11 +142,21 @@ export default class AuthContainer extends React.Component {
     }
   }
 
-  setNotificationRegion = async region => {
+  setNotificationRegion = async notificationRegion => {
     await db.collection('users')
       .doc(auth.currentUser.uid)
       .set({
-        notificationRegion: region ? region : null
+        notificationRegion
+      }, {
+        merge: true
+      })
+  }
+
+  setShouldNotify = async shouldNotify => {
+    await db.collection('users')
+      .doc(auth.currentUser.uid)
+      .set({
+        shouldNotify
       }, {
         merge: true
       })
@@ -174,6 +184,7 @@ export default class AuthContainer extends React.Component {
         auth: {
           ...this.state,
           onSignOut: this.onSignOut,
+          setShouldNotify: this.setShouldNotify,
           setNotificationRegion: this.setNotificationRegion,
         }
       }}> 

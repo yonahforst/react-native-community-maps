@@ -5,7 +5,9 @@ import React, {
 import {
   View,
   Button,
-  StyleSheet
+  StyleSheet,
+  Switch,
+  Text,
 } from 'react-native'
 
 import { 
@@ -22,8 +24,6 @@ export default class Settings extends Component {
       navigation
     } = this.props
 
-
-
     navigation.setParams({
       onSave: this.onSave,
     })
@@ -34,7 +34,11 @@ export default class Settings extends Component {
       auth: {
         onSignOut,
         setNotificationRegion,
-        user,
+        setShouldNotify,
+        user: {
+          notificationRegion,
+          shouldNotify,
+        },
       }
     } = this.props
 
@@ -44,27 +48,39 @@ export default class Settings extends Component {
         <View
         style={styles.container}>
           <View
-          style={styles.mapContainer}>
-            <MapView 
-            style={styles.map} 
-            initialRegion={user.notificationRegion}
-            showsUserLocation={true}
-            zoomEnabled={true}
-            showsScale={true}
-            onRegionChangeComplete={setNotificationRegion}
+          style={styles.optionRow}>
+            <Text>Receive push notifications</Text>
+            <Switch
+            onValueChange={setShouldNotify}
+            value={shouldNotify} />
+          </View>
 
-            showsPointsOfInterest={false}
-            showsMyLocationButton={false}
-            showsBuildings={false}
-            pitchEnabled={false}
-            showsTraffic={false}
-            showsCompass={false}
-            showsIndoors={false}
-            />
-            <View 
-            pointerEvents='none'
-            style={styles.overlay}/>
-          </View>   
+          { shouldNotify && 
+            <View
+            style={styles.mapContainer}>
+              <MapView 
+              style={styles.map} 
+              initialRegion={notificationRegion}
+              showsUserLocation={true}
+              zoomEnabled={true}
+              showsScale={true}
+              onRegionChangeComplete={setNotificationRegion}
+
+              showsPointsOfInterest={false}
+              showsMyLocationButton={false}
+              showsBuildings={false}
+              pitchEnabled={false}
+              showsTraffic={false}
+              showsCompass={false}
+              showsIndoors={false}
+              />
+              <View 
+              pointerEvents='none'
+              style={styles.overlay}>
+                <Text>Set notification area</Text>
+              </View>
+            </View>   
+          }
         </View>
         <Button
         title='Signout'
@@ -80,17 +96,22 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
   },
-  mapContainer: {
-    aspectRatio: 1,
+  optionRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
   },
   map: {
-    ...StyleSheet.absoluteFill,
+    aspectRatio: 1,
   }, 
   overlay: {
     ...StyleSheet.absoluteFill,
     backgroundColor: 'transparent',
     borderRadius: 500,
     borderWidth: 2,
-    borderColor: '#69696980'
+    borderColor: '#69696980',
+    alignItems: 'center',
+    padding: 10,
   }
 })
