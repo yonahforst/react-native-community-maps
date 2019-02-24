@@ -2,6 +2,9 @@ const functions = require('firebase-functions')
 const { GeoFirestore } = require('geofirestore')
 
 const { sendPushNotification } = require('./expo')
+
+const express = require('express');
+
 const admin = require('firebase-admin');
 admin.initializeApp();
 
@@ -51,3 +54,29 @@ exports.onCreateItem = functions.firestore
         return Promise.all(promises)
       })
   })
+
+
+const app = express();
+app.get('/:id', (req, res) => {
+  return firestore
+    .collection('items')
+    .doc(req.params.id)
+    .get()
+    .then(doc => {
+      if (!doc.exists)
+        return res.status(404).send('You just got 404\'d!!')
+      const data = doc.data()
+      res.status(200).send(`
+      <!doctype html>
+        <head>
+          <title>Nice find!</title>
+        </head>
+        <body>
+          <img src="${data.pictureUri}" />
+        </body>
+      </html>
+      `);
+    })
+});
+
+exports.getItem = functions.https.onRequest(app);
