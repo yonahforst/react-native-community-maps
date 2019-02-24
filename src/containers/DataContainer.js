@@ -118,7 +118,7 @@ export default class DataContainer extends React.Component {
       await db.collection('items').add({
         emoji,
         pictureUri,
-        at: Date.now(),
+        createdAt: Date.now(),
         picturePreview: base64,
         coordinates: new GeoPoint(latitude, longitude),
         userId: auth.currentUser.uid,

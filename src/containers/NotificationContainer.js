@@ -10,17 +10,35 @@ import {
   db,
 } from '../lib/firebase'
 
+import FB from 'firebase'
+
+import {
+  getMetersBetweenPoints,
+} from '../lib/geo'
+
+const { firestore: { GeoPoint } } = FB
+
+const { GeoFirestore } = require('geofirestore')
+
 const NotificationContext = React.createContext({
   region: {},
   shouldNotify: false,
 });
 
+const geofirestore = new GeoFirestore(db);
+const notificationPreferences = geofirestore.collection('notificationPreferences')
+
+
 export default class NotificationContainer extends React.Component {
 
   componentDidMount = () => {
-    this.unsubscribe = db.collection('notificationPreferences').doc(auth.currentUser.uid)
+    this.unsubscribe = notificationPreferences.doc(auth.currentUser.uid)
       .onSnapshot(doc => {
-        this.setState(doc.data())
+        const data = doc.data()
+        if (!data) return
+        // if there's no location data yet, geofirestore won't parse the data from the 
+        // nested data document, or whatever it's called. So we do it ourselves.
+        this.setState(data.d ? data.d : data)
       })
   }
 
@@ -52,9 +70,8 @@ export default class NotificationContainer extends React.Component {
   
     // Get the token that uniquely identifies this device
     const pushToken = await Notifications.getExpoPushTokenAsync();
-    const user = auth.currentUser;
     
-    await db.collection('notificationPreferences').doc(user.uid).set({
+    await notificationPreferences.doc(auth.currentUser.uid).set({
       pushToken
     }, {
       merge: true
@@ -64,11 +81,17 @@ export default class NotificationContainer extends React.Component {
   }
 
   setRegion = async region => {
-    await db.collection('notificationPreferences')
-      .doc(auth.currentUser.uid)
+    const radius = getMetersBetweenPoints(region, {
+      longitude: region.longitude + region.longitudeDelta,
+      latitude: region.latitude + region.latitudeDelta,
+    })
+
+    await notificationPreferences.doc(auth.currentUser.uid)
       .set({
         region,
+        radius: Math.round(radius),
       }, {
+        customKey: 'region',
         merge: true
       })
   }
@@ -80,8 +103,7 @@ export default class NotificationContainer extends React.Component {
       // if (!hasPermission) return
     }
 
-    await db.collection('notificationPreferences')
-      .doc(auth.currentUser.uid)
+    await notificationPreferences.doc(auth.currentUser.uid)
       .set({
         shouldNotify
       }, {
