@@ -26,7 +26,14 @@ export default class AuthContainer extends React.Component {
 
   componentDidMount = () => {
     this.unsubscribeAuthState = auth.onAuthStateChanged(currentUser => {
-      this.unsubscribeUser = currentUser && db.collection('users').doc(currentUser.uid)
+      if (!currentUser) {
+        this.setState({
+          isReady: true
+        })
+        return
+      }
+
+      this.unsubscribeUser = db.collection('users').doc(currentUser.uid)
         .onSnapshot(doc => {
           this.setState({ 
             user: {
