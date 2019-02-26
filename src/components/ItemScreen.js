@@ -9,7 +9,8 @@ import {
   Dimensions,
   Modal,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  Share,
 } from 'react-native';
 
 import {
@@ -19,6 +20,10 @@ import {
 import ImageZoom from 'react-native-image-pan-zoom'
 
 import Comments from './Comments'
+
+import {
+  shareUrl
+} from '../lib/options'
 
 const { height, width } = Dimensions.get('window')
 
@@ -48,8 +53,21 @@ export default class ItemScreen extends React.Component {
       id
     })
 
+    navigation.setParams({
+      onShare: this.onShare,
+    })
   }
   
+  onShare = () => {
+    const { 
+      id,
+    } = this.state
+
+    Share.share({
+      message: 'Check out this dope stuff! ' + shareUrl.replace('{id}', id),
+    })
+  }
+
   onLike = () => {
     const { 
       id,

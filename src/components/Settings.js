@@ -49,7 +49,7 @@ export default class Settings extends Component {
         style={styles.container}>
           <View
           style={styles.optionRow}>
-            <Text>Receive push notifications</Text>
+            <Text>Notify me on new stuff</Text>
             <Switch
             onValueChange={setShouldNotify}
             value={shouldNotify} />

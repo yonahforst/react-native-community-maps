@@ -70,10 +70,85 @@ app.get('/:id', (req, res) => {
       <!doctype html>
         <head>
           <title>Nice find!</title>
+          <meta property="og:title" content="Dope stuff nearby!">
+          <meta property="og:image:secure" content="${data.pictureUri}">
+          <meta property="og:type" content="website" />
+
+          <script src="https://cdn.jsdelivr.net/npm/siema@1.5.1/dist/siema.min.js"></script>
+          <style>
+          body {
+            width: 100%;
+            max-width: 800px;
+            height: 100%;
+            max-height: 800px;          
+            margin: 0 auto;
+          }
+          
+          img {
+            width: 100%;
+            height: 100%;
+          }
+          
+          .siema {
+            margin: 1rem 0;
+          }
+          
+          .slide {
+            position: relative;
+          }
+
+          .button {
+            position: absolute;
+            bottom: 10px;
+            background-color: #555;
+            color: white;
+            font-size: 16px;
+            padding: 12px 24px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+          }          
+
+          .map.button {
+            right: 10px;
+          }
+
+          .picture.button {
+            left: 10px;
+          }
+
+          </style>
         </head>
         <body>
-          <img src="${data.pictureUri}" />
+          <div class="siema">
+            <div class="slide">
+              <img src="${data.pictureUri}" />
+              <button class="map button">Map</button>
+            </div>
+            <div class="slide">
+              <img src="
+              https://maps.googleapis.com/maps/api/staticmap?size=900x900&zoom=18
+              &markers=color:red%7C${data.coordinates.latitude},${data.coordinates.longitude}
+              &key=AIzaSyDjX31I6z_T9CMu8v6ZXeLkbcIdese8B_s
+              "/>
+              <button class="picture button">Picture</button>
+            </div>
+          </div>
         </body>
+        <script>
+          var mySiema = new Siema({
+            perPage: 1,
+          });
+
+          document.querySelector('.map.button')
+          .addEventListener('click', () => mySiema.goTo(1));
+
+          document.querySelector('.picture.button')
+          .addEventListener('click', () => mySiema.goTo(0));
+
+
+
+        </script>
       </html>
       `);
     })

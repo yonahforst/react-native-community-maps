@@ -28,6 +28,14 @@ const Navigator = createStackNavigator({
   },
   ItemScreen: {
     screen: ItemScreen,
+    navigationOptions: ({ navigation }) => ({
+      headerRight: (
+        <Button
+          onPress={navigation.getParam('onShare') || noop}
+          title="Share"
+        />
+      ),
+    })
   },
   AddItemScreen: {
     screen: AddTimescren,
