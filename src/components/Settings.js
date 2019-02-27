@@ -14,7 +14,7 @@ import {
   MapView,
 } from 'expo'
 
-const DELTA = 0.001
+const DELTA = 0.005
 
 export default class Settings extends Component {
   state={}
@@ -27,9 +27,27 @@ export default class Settings extends Component {
     navigation.setParams({
       onSave: this.onSave,
     })
+
+    const {
+      longitude,
+      latitude,
+    } = navigation.getParam('coordinates')
+    
+    this.setState({
+      userRegion: {
+        longitude,
+        latitude,
+        longitudeDelta: DELTA,
+        latitudeDelta: DELTA,
+      }
+    })
   }
 
   render() {
+    const {
+      userRegion
+    } = this.state
+
     const {
       notification: {
         region,
@@ -60,7 +78,7 @@ export default class Settings extends Component {
             style={styles.mapContainer}>
               <MapView 
               style={styles.map} 
-              initialRegion={region}
+              initialRegion={region || userRegion}
               showsUserLocation={true}
               zoomEnabled={true}
               showsScale={true}
@@ -77,7 +95,7 @@ export default class Settings extends Component {
               <View 
               pointerEvents='none'
               style={styles.overlay}>
-                <Text>Set notification area</Text>
+                <Text>Move to set notification area</Text>
               </View>
             </View>   
           }
@@ -110,8 +128,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     borderRadius: 500,
     borderWidth: 2,
-    borderColor: '#69696980',
+    borderColor: '#696969',
     alignItems: 'center',
-    padding: 10,
+    opacity: 0.5,
+    padding: 20,
   }
 })

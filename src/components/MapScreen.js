@@ -145,13 +145,20 @@ export default class App extends React.Component {
   }
 
   onShowSettings = () => {
-    this.props.navigation.navigate('Settings')
+    const {
+      userCoordinates,
+    } = this.state
+
+    this.props.navigation.navigate('Settings', { 
+      coordinates: userCoordinates
+    })
   }
 
   render() {
     const { 
       userCoordinates,
     } = this.state
+
     const {
       data: {
         items,
