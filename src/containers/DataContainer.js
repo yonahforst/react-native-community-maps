@@ -39,7 +39,7 @@ export default class DataContainer extends React.Component {
 
   componentDidMount() {
     this.firebaseUnsubscribe = db.collection('items')
-    .orderBy('at', 'desc')
+    .orderBy('createdAt', 'desc')
     .onSnapshot(querySnapshot => {
 
       var items = {};
