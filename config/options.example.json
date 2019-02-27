@@ -1,0 +1,7 @@
+{
+  "userZoomEmoji": "🙋‍♂️",
+  "itemEmoji": "🍔",
+  "placeholders": [ "Say something..." ],
+  "noEmojiPicker": false,
+  "shareUrl": "https://your-project-subdomain-goes-here.cloudfunctions.net/getItem/{id}"
+}

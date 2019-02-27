@@ -1,0 +1,4 @@
+{
+  "itemEmoji": "🍭",
+  "shareUrl": "https://us-central1-street-stuff-56693.cloudfunctions.net/getItem/{id}"
+}

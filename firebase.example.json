@@ -4,5 +4,12 @@
   "databaseURL": "xxxxxxxxxxx",
   "projectId": "xxxxxxxxxxx",
   "storageBucket": "xxxxxxxxxxx",
-  "messagingSenderId": "xxxxxxxxxxx"
+  "messagingSenderId": "xxxxxxxxxxx",
+  "firestore": {
+    "rules": "config/firestore.rules",
+    "indexes": "config/firestore.indexes.json"
+  },
+  "storage": {
+    "rules": "config/storage.rules"
+  }
 }

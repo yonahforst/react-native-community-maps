@@ -1,4 +1,4 @@
-import options from '../../options'
+import options from '../../config/options'
 
 module.exports = {
   itemEmoji: '🍔',
