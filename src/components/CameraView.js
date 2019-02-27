@@ -11,6 +11,7 @@ import {
 import { 
   Camera,
   Permissions, 
+  Linking,
 } from 'expo';
 
 import { 
@@ -82,6 +83,8 @@ export default class CameraView extends React.Component {
     })
   }
 
+  openSettings = () => Linking.openURL('app-settings:')
+
   renderCamera = () => {
     const {
       shouldFlash
@@ -120,10 +123,19 @@ export default class CameraView extends React.Component {
     } = this.props
 
     if (hasCameraPermission === null)
-      return <View />
+      return <View style={style}/>
 
-    if (hasCameraPermission === false)
-      return <Text>No access to camera</Text>
+    if (!hasCameraPermission)
+      return (
+        <View style={[ style, styles.cameraAlert ]}>
+          <Text>Oops! We don't have permission to access your camera.</Text> 
+          <TouchableHighlight 
+          style={styles.settingsButton}
+          onPress={this.openSettings}>
+            <Text>Open Settings</Text>
+          </TouchableHighlight>
+        </View>
+      )
     
     return (
       <View style={style}>
@@ -181,6 +193,25 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 2.5,
     elevation: 4,
-  }
+  },
 
+  cameraAlert: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  settingsButton: {
+    backgroundColor: 'white',
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 2.5,
+    elevation: 4,
+  }
 });

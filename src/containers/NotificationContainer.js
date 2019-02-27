@@ -1,8 +1,13 @@
 import React from 'react'
 
+import {
+  Alert,
+} from 'react-native'
+
 import { 
-  Permissions, 
   Notifications, 
+  Permissions, 
+  Linking,
 } from 'expo'
 
 import {
@@ -62,7 +67,6 @@ export default class NotificationContainer extends React.Component {
       finalStatus = status;
     }
   
-    console.log(finalStatus)
     // Stop here if the user did not grant permissions
     if (finalStatus !== 'granted') {
       return false
@@ -96,11 +100,23 @@ export default class NotificationContainer extends React.Component {
       })
   }
 
+  openSettings = () => Linking.openURL('app-settings:')
+
   setShouldNotify = async shouldNotify => {
     if (shouldNotify) {
       const hasPermission = await this.requestPermission()
-      // console.log(hasPermission)
-      // if (!hasPermission) return
+      if (!hasPermission) {
+        Alert.alert(
+          'Oops...🙈',
+          'We don\'t have permission. Please enable Push Notifications from settings',
+          [
+            {text: 'Open settings', onPress: this.openSettings },
+            {text: 'Cancel', style: 'cancel'},
+          ],
+        )
+        
+        return
+      }
     }
 
     await notificationPreferences.doc(auth.currentUser.uid)
