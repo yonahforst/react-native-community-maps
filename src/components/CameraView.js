@@ -13,9 +13,14 @@ import {
   Permissions, 
 } from 'expo';
 
+import { 
+  MaterialIcons,
+} from '@expo/vector-icons';
+
 export default class CameraView extends React.Component {
   state = {
     hasCameraPermission: null,
+    shouldFlash: false,
   };
 
   async componentDidMount() {
@@ -30,11 +35,13 @@ export default class CameraView extends React.Component {
 
   snap = async () => {
     if (this.camera) {
-      const picture = await this.camera.takePictureAsync({
+      this.camera.pausePreview();
+
+      await this.camera.takePictureAsync({
         exif: true,
+        onPictureSaved: this.setPicture
       });
-      
-      this.setPicture(picture)
+
     }
   };
 
@@ -69,14 +76,30 @@ export default class CameraView extends React.Component {
     )
   }
 
+  toggleFlash = () => {
+    this.setState({
+      shouldFlash: !this.state.shouldFlash
+    })
+  }
+
   renderCamera = () => {
+    const {
+      shouldFlash
+    } = this.state
+
     return (
       <Camera
       style={styles.container}
       ratio='1:1'
-      pictureSize='Medium'
-      flashMode='auto'
+      pictureSize='Small'
+      flashMode={shouldFlash ? 'on' : 'off'}
       ref={ref => this.camera = ref } >
+        <TouchableHighlight 
+        onPress={this.toggleFlash}
+        style={styles.toggleFlash}>
+          <MaterialIcons name={shouldFlash ? 'flash-on' : 'flash-off'} size={24} color="white" />
+        </TouchableHighlight>
+
         <TouchableHighlight 
         onPress={this.snap}
         style={[ styles.button, styles.snapButton ]}>
@@ -125,6 +148,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'red',
     borderColor: 'white',
     borderWidth: 2,
+  },
+
+  toggleFlash: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    padding: 5,
+    borderRadius: 25,
+    opacity: 0.7,
   },
 
   clearPicture: {
