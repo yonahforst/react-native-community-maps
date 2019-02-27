@@ -71,8 +71,10 @@ app.get('/:id', (req, res) => {
         <head>
           <title>Nice find!</title>
           <meta property="og:title" content="Dope stuff nearby!">
-          <meta property="og:image:secure" content="${data.pictureUri}">
+          <meta property="og:image" itemprop="image" content="https://demo.cloudimg.io/width/300/n/${data.pictureUri}">
           <meta property="og:type" content="website" />
+          <meta property="og:description" content="Look what I found...">
+          
 
           <script src="https://cdn.jsdelivr.net/npm/siema@1.5.1/dist/siema.min.js"></script>
           <style>
@@ -87,6 +89,7 @@ app.get('/:id', (req, res) => {
           img {
             width: 100%;
             height: 100%;
+            image-orientation: from-image;
           }
           
           .siema {
