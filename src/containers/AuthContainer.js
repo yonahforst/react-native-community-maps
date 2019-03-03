@@ -12,14 +12,14 @@ import {
 import Login from '../components/Login'
 
 const AuthContext = React.createContext({
-  currentUser: null,
+  user: null,
   loading: false,
   error: null,
 });
 
 export default class AuthContainer extends React.Component {
   state = {
-    currentUser: null,
+    user: null,
     loading: false,
     error: null,
   }
@@ -37,7 +37,7 @@ export default class AuthContainer extends React.Component {
         .onSnapshot(doc => {
           this.setState({ 
             user: {
-              id: doc.key,
+              id: doc.id,
               ...doc.data(),
             },
             isReady: true, 

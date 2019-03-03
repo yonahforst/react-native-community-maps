@@ -14,7 +14,7 @@ import {
 
 import FB from 'firebase'
 
-const { firestore: { GeoPoint } } = FB
+const { firestore: { GeoPoint, FieldValue } } = FB
 
 const DataContext = React.createContext({
   items: {},
@@ -124,6 +124,7 @@ export default class DataContainer extends React.Component {
         userId: auth.currentUser.uid,
         likes: 1,
         dislikes: 0,
+        viewedBy: [],
       })
   
       this.setState({
@@ -148,6 +149,12 @@ export default class DataContainer extends React.Component {
   setDislikes = (id, dislikes) => {
     db.collection('items').doc(id).update({
       dislikes
+    })
+  }
+
+  addToViewedBy = (id) => {
+    db.collection('items').doc(id).update({
+      viewedBy: FieldValue.arrayUnion(auth.currentUser.uid)
     })
   }
 
@@ -205,6 +212,7 @@ export default class DataContainer extends React.Component {
           addNewItem: this.addNewItem,
           setChatRoom: this.setChatRoom,
           sendMessage: this.sendMessage,
+          addToViewedBy: this.addToViewedBy,
         }
       }}> 
         { this.props.children }

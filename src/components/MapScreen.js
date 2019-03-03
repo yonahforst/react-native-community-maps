@@ -54,6 +54,9 @@ export default class App extends React.Component {
 
   renderMarker = id => {
     const {
+      auth: {
+        user,
+      },
       data: {
         items,
       }={},
@@ -62,7 +65,10 @@ export default class App extends React.Component {
     const { 
       coordinates, 
       emoji, 
+      viewedBy=[],
     } = items[id] 
+
+    
     
     return (
       <MapView.Marker
@@ -70,7 +76,10 @@ export default class App extends React.Component {
       onPress={() => this.onShowItem(id) }
       coordinate={coordinates}>
         <Text 
-        style={styles.emoji} 
+        style={[
+          styles.emoji,
+          viewedBy.includes(user.id) && styles.viewed,
+        ]} 
         onPress={() => this.onShowItem(id) }>
           { emoji }
         </Text>
@@ -264,5 +273,10 @@ const styles = StyleSheet.create({
   },
   emoji: {
     fontSize: 30,
-  }
+    zIndex: 1,
+  },
+  viewed: {
+    opacity: 0.5,
+    zIndex: 0,
+  },
 });

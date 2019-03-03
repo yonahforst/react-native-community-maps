@@ -42,12 +42,14 @@ export default class ItemScreen extends React.Component {
       navigation,
       data: {
         setChatRoom,
+        addToViewedBy,
       },
     } = this.props 
 
     const id = navigation.getParam('id')
 
     setChatRoom(id)
+    addToViewedBy(id)
 
     this.setState({
       id
