@@ -93,7 +93,8 @@ export default class ItemScreen extends React.Component {
         cancelButtonIndex,
       },
       buttonIndex => {
-        Alert.alert('Flagged', 'Thanks for letting us know 🤓')
+        if (buttonIndex !== cancelButtonIndex)
+          Alert.alert('Flagged', 'Thanks for letting us know 🤓')
       },
     );  
   }
