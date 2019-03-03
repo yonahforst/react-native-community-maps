@@ -5,6 +5,10 @@ import {
 
 import { createStackNavigator } from 'react-navigation';
 
+import {
+  ActionSheetProvider,
+} from '@expo/react-native-action-sheet';
+
 import AuthContainer from './containers/AuthContainer'
 import DataContainer from './containers/DataContainer'
 import NotificationContainer from './containers/NotificationContainer'
@@ -31,8 +35,8 @@ const Navigator = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       headerRight: (
         <Button
-          onPress={navigation.getParam('onShare') || noop}
-          title="Share"
+          onPress={navigation.getParam('onMore') || noop}
+          title="More"
         />
       ),
     })
@@ -57,7 +61,9 @@ export default () => (
   <AuthContainer>
     <DataContainer>
       <NotificationContainer>
-        <Navigator />
+        <ActionSheetProvider>
+          <Navigator />
+        </ActionSheetProvider>
       </NotificationContainer>
     </DataContainer>
   </AuthContainer>

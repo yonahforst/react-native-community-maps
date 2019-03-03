@@ -11,6 +11,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Share,
+  Alert,
 } from 'react-native';
 
 import {
@@ -56,8 +57,45 @@ export default class ItemScreen extends React.Component {
     })
 
     navigation.setParams({
-      onShare: this.onShare,
+      onMore: this.onMore,
     })
+  }
+
+  onMore = () => {
+    const options = ['Share', 'Flag', 'Cancel'];
+    const destructiveButtonIndex = 1;
+    const cancelButtonIndex = 2;
+  
+    this.props.showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+        destructiveButtonIndex,
+      },
+      buttonIndex => {
+        switch (buttonIndex) {
+          case 0:
+            return this.onShare()
+          case 1:
+            return this.onFlag()
+        }
+      },
+    );  
+  }
+
+  onFlag = () => {
+    const options = ['Item is missing', 'Spam', 'Offensive content', 'Cancel'];
+    const cancelButtonIndex = 3;
+  
+    this.props.showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+      },
+      buttonIndex => {
+        Alert.alert('Flagged', 'Thanks for letting us know 🤓')
+      },
+    );  
   }
   
   onShare = () => {
