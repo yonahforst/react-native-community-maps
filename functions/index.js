@@ -52,6 +52,7 @@ exports.onCreateItem = functions.firestore
         )
 
         return Promise.all(promises)
+          .then(() => true)
       })
   })
 
