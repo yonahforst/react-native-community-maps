@@ -11,6 +11,7 @@ import {
 
 import { 
   Provider as PaperProvider, 
+  Appbar,
 } from 'react-native-paper'
 
 import AuthContainer from './containers/AuthContainer'
@@ -30,37 +31,48 @@ const Navigator = createStackNavigator({
   MapScreen: {
     screen: MapScreen,
     navigationOptions: ({ navigation }) => ({
-      headerRight: (
-        <Button
-          onPress={navigation.getParam('onShowSettings') || noop}
-          title="Settings"
-        />
+      header: (
+        <Appbar.Header>
+          <Appbar.Action icon='menu' onPress={navigation.getParam('onShowSettings') || noop} />
+        </Appbar.Header>
       ),
     })
   },
   Settings: {
-    screen: Settings
+    screen: Settings,
+    navigationOptions: ({ navigation}) => ({
+      header: (
+        <Appbar.Header>
+          <Appbar.BackAction onPress={() => navigation.goBack()} />
+          <Appbar.Content title='Settings' />
+        </Appbar.Header>
+      ),
+    })
   },
   ItemScreen: {
     screen: ItemScreen,
     navigationOptions: ({ navigation }) => ({
-      headerRight: (
-        <Button
-          onPress={navigation.getParam('onMore') || noop}
-          title="More"
-        />
+      header: (
+        <Appbar.Header>
+          <Appbar.BackAction onPress={() => navigation.goBack()} />
+          <Appbar.Content />
+          <Appbar.Action icon="more-vert" onPress={navigation.getParam('onMore') || noop} />
+        </Appbar.Header>
       ),
     })
   },
   AddItemScreen: {
     screen: AddTimescren,
     navigationOptions: ({ navigation }) => ({
-      headerRight: (
-        <Button
+      header: (
+        <Appbar.Header>
+          <Appbar.BackAction onPress={() => navigation.goBack()} />
+          <Appbar.Content />
+          <Appbar.Action
+          icon="save" 
           disabled={!navigation.getParam('canSave')}
-          onPress={navigation.getParam('onSave') || noop}
-          title="Save"
-        />
+          onPress={navigation.getParam('onSave') || noop} />
+        </Appbar.Header>
       ),
     })
   },
