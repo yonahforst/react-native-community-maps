@@ -1,13 +1,17 @@
-import React from 'react';
+import React from 'react'
 import { 
   Button,
-} from 'react-native';
+} from 'react-native'
 
-import { createStackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation'
 
 import {
   ActionSheetProvider,
-} from '@expo/react-native-action-sheet';
+} from '@expo/react-native-action-sheet'
+
+import { 
+  Provider as PaperProvider, 
+} from 'react-native-paper'
 
 import AuthContainer from './containers/AuthContainer'
 import DataContainer from './containers/DataContainer'
@@ -18,14 +22,21 @@ import ItemScreen from './containers/ItemScreen'
 import AddTimescren from './containers/AddItemScreen'
 import Settings from './containers/Settings'
 
+import theme from './lib/theme'
+
 const noop = () => {}
 
 const Navigator = createStackNavigator({
   MapScreen: {
     screen: MapScreen,
-    navigationOptions: {
-      header: null,
-    }
+    navigationOptions: ({ navigation }) => ({
+      headerRight: (
+        <Button
+          onPress={navigation.getParam('onShowSettings') || noop}
+          title="Settings"
+        />
+      ),
+    })
   },
   Settings: {
     screen: Settings
@@ -61,9 +72,11 @@ export default () => (
   <AuthContainer>
     <DataContainer>
       <NotificationContainer>
-        <ActionSheetProvider>
-          <Navigator />
-        </ActionSheetProvider>
+        <PaperProvider theme={theme}>
+          <ActionSheetProvider>
+            <Navigator />
+          </ActionSheetProvider>
+        </PaperProvider>
       </NotificationContainer>
     </DataContainer>
   </AuthContainer>

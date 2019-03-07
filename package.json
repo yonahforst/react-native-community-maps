@@ -12,6 +12,7 @@
     "@babel/runtime": "^7.1.5",
     "@expo/react-native-action-sheet": "^2.1.0",
     "cuid": "^2.1.4",
+    "deepmerge": "^3.2.0",
     "expo": "^31.0.2",
     "firebase": "^5.5.8",
     "geofirestore": "github:geofirestore/geofirestore-js#dev",
@@ -22,6 +23,7 @@
     "react-native-gifted-chat": "^0.4.3",
     "react-native-image-pan-zoom": "^2.1.11",
     "react-native-image-progress": "^1.1.1",
+    "react-native-paper": "^2.12.0",
     "react-native-progress": "^3.5.0",
     "react-navigation": "^2.18.2"
   },

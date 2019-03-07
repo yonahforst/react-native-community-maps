@@ -13,7 +13,12 @@ import {
   MapView,
   Location, 
   Permissions,
-} from 'expo';
+} from 'expo'
+
+import { 
+  FAB,
+} from 'react-native-paper'
+
 
 import {
   itemEmoji,
@@ -28,6 +33,12 @@ export default class App extends React.Component {
   }
 
   async componentDidMount() {
+
+
+    this.props.navigation.setParams({
+      onShowSettings: this.onShowSettings,
+    })
+
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
     this.setState({
       permissionStatus: status,
@@ -187,51 +198,19 @@ export default class App extends React.Component {
           { Object.keys(items).map(this.renderMarker) }
         </MapView>
 
+        <FAB
+        style={styles.addItemFab}
+        disabled={loading}
+        icon="add"
+        onPress={this.onAddItem}
+        />
 
-  
-        <View
-        pointerEvents={'box-none'}
-        style={styles.buttonContainer}>
-          <View
-          pointerEvents={'box-none'}
-          style={styles.buttonRow}>
-            <TouchableHighlight
-            style={styles.button}
-            onPress={this.onShowSettings}>
-              <Text 
-                style={styles.emoji}>
-                ⚙️
-                </Text>
-            </TouchableHighlight>
-  
-          </View>
-          <View
-          pointerEvents={'box-none'}
-          style={styles.buttonRow}>
-            <TouchableHighlight
-            style={styles.button}
-            disabled={loading}
-            onPress={this.onAddItem}>
-              {loading 
-                ? <ActivityIndicator />
-                : <Text 
-                  style={styles.emoji}>
-                    { itemEmoji}
-                  </Text>
-              }
-            </TouchableHighlight>
-
-            <TouchableHighlight
-            style={styles.button}
-            disabled={!userCoordinates}
-            onPress={this.zoomToUser}>
-              <Text 
-                style={styles.emoji}>
-                { userZoomEmoji }
-                </Text>
-            </TouchableHighlight>
-          </View>
-        </View>
+        <FAB
+        style={styles.myLocationFab}
+        disabled={!userCoordinates}
+        icon="near-me"
+        onPress={this.zoomToUser}
+        />
         
       </View>
     );
@@ -246,31 +225,21 @@ const styles = StyleSheet.create({
   map: {
    ...StyleSheet.absoluteFill,
   },
-  buttonContainer: {
-    margin: 20,
-    flex: 1,
-    justifyContent: 'space-between',
-  },
-  buttonRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  button: {
+  myLocationFab: {
+    position: 'absolute',
+    margin: 7,
+    right: 0,
+    bottom: 0,
     backgroundColor: 'white',
-    height: 56,
-    width: 56,
-    borderRadius: 28,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 2.5,
-    elevation: 4,
   },
+  addItemFab: {
+    position: 'absolute',
+    margin: 7,
+    left: 0,
+    bottom: 0,
+    backgroundColor: 'white',
+  },
+
   emoji: {
     fontSize: 30,
     zIndex: 1,

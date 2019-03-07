@@ -2,12 +2,16 @@ import React from 'react'
 
 import {
   View,
-  TextInput,
   StyleSheet,
-  Button,
-  Text,
-  ActivityIndicator,
 } from 'react-native'
+
+import { 
+  TextInput,
+  BottomNavigation, 
+  ActivityIndicator,
+  HelperText,
+  Button,
+} from 'react-native-paper'
 
 const Loading = () => (
   <View style={styles.loading}>
@@ -20,29 +24,30 @@ export default class Login extends React.Component {
     username: null,
     email: null,
     password: null,
+    index: 0,
+    routes: [
+      { key: 'login', title: 'Login' },
+      { key: 'signup', title: 'Signup' },
+    ],
   }
-
-  showLogin = () => this.setState({ screen: 'login' })
-  showSignup = () => this.setState({ screen: 'signup' })
 
   onLogin = () => this.props.onLogin(this.state)
   onSignup = () => this.props.onSignup(this.state)
   onAnonymousLogin = () => this.props.onAnonymousLogin()
 
-  render() {
+  renderScene = ({ route }) => {
     const {
       loading,
       error,
     } = this.props
 
     const {
-      screen,
       username,
       email,
       password,
     } = this.state
 
-    switch (screen) {
+    switch (route.key) {
       case 'login':
         return (
           <View 
@@ -65,23 +70,28 @@ export default class Login extends React.Component {
             placeholder='Password'
             onChangeText={password => this.setState({ password })} />
 
-            { error && <Text style={styles.error}>{ error.message }</Text> }
+            <HelperText
+            type="error"
+            visible={error}>
+            { error && error.message }
+            </HelperText>
 
             <Button
-            onPress={this.onLogin}
-            title='Login' />
+            mode='contained'
+            disabled={loading}
+            onPress={this.onLogin}>
+            Login
+            </Button>
 
             <Button
-            onPress={this.showSignup}
+            disabled={loading}
             color='grey'
-            title='Signup' />
+            onPress={this.onAnonymousLogin}>
+            Use anonymously
+            </Button>
 
-            <Button
-            onPress={this.onAnonymousLogin}
-            color='grey'
-            title='Use anonymously' />
-
-            { loading && <Loading />}
+            <ActivityIndicator
+            animating={loading} />
           </View>
         )
 
@@ -114,43 +124,56 @@ export default class Login extends React.Component {
             placeholder='Password'
             onChangeText={password => this.setState({ password })} />
 
-            { error && <Text style={styles.error}>{ error.message }</Text> }
+            <HelperText
+            type="error"
+            visible={error}>
+              { error && error.message }
+            </HelperText>
+  
+            <Button
+            mode='contained'
+            disabled={loading}
+            onPress={this.onSignup}>
+            Signup
+            </Button>
 
             <Button
-            onPress={this.onSignup}
-            title='Signup' />
-
-            <Button
-            onPress={this.showLogin}
+            disabled={loading}
             color='grey'
-            title='Login' />
+            onPress={this.onAnonymousLogin}>
+            Use anonymously
+            </Button>
 
-            <Button
-            onPress={this.onAnonymousLogin}
-            color='grey'
-            title='Use anonymously' />
-
-            { loading && <Loading />}
+            <ActivityIndicator
+            animating={loading} />
 
           </View>
         )
     }
-
-
   }
+
+  handleIndexChange = index => this.setState({ index })
+
+
+  render() {
+    return (
+      <BottomNavigation
+        navigationState={this.state}
+        onIndexChange={this.handleIndexChange}
+        renderScene={this.renderScene}
+      />
+    )
+    }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    marginHorizontal: 40,
   },
   input: {
-    padding: 10, 
-    borderColor: 'gray', 
-    borderWidth: 1,
-    margin: 10,
-    marginHorizontal: 40,
+    marginVertical: 10,
   },
   error: {
     color: 'red',
