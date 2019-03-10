@@ -3,16 +3,16 @@ import { Header } from 'react-navigation';
 
 import { 
   StyleSheet, 
-  Text, 
   View,
   TouchableHighlight,
   Dimensions,
-  Modal,
   KeyboardAvoidingView,
   Platform,
   Share,
   Alert,
 } from 'react-native';
+
+import { Modal, Portal } from 'react-native-paper';
 
 import {
   Image,
@@ -214,10 +214,10 @@ export default class ItemScreen extends React.Component {
         users={users}
         onSubmit={this.onSendMessage}
         />
-
+        <Portal>
         <Modal
-        animationType='fade'
-        onRequestClose={this.onToggleModal}
+        // animationType='fade'
+        onDismiss={this.onToggleModal}
         visible={shouldShowModal}>
           <ImageZoom 
           cropWidth={width}
@@ -225,6 +225,7 @@ export default class ItemScreen extends React.Component {
           imageWidth={SIZE}
           imageHeight={SIZE}
           enableSwipeDown={true}
+          onClick={this.onToggleModal}
           onSwipeDown={this.onToggleModal}>
             <Image
             style={styles.image}
@@ -235,13 +236,8 @@ export default class ItemScreen extends React.Component {
             uri={pictureUri}
             />
           </ImageZoom>
-          <TouchableHighlight
-          style={[ styles.button, styles.closeButton ]}
-          onPress={this.onToggleModal}>
-            <Text> X </Text>
-          </TouchableHighlight>
         </Modal>
-
+        </Portal>
       </KeyboardAvoidingView>
     )    
   }

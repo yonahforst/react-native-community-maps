@@ -4,11 +4,14 @@ import React, {
 
 import {
   View,
-  Button,
   StyleSheet,
-  Switch,
-  Text,
 } from 'react-native'
+
+import {
+  Text,
+  Switch,
+  Button,
+} from 'react-native-paper'
 
 import { 
   MapView,
@@ -64,7 +67,7 @@ export default class Settings extends Component {
       <View
       style={styles.container}>
         <View
-        style={styles.container}>
+        style={styles.innerContainer}>
           <View
           style={styles.optionRow}>
             <Text>Notify me on new stuff</Text>
@@ -100,10 +103,9 @@ export default class Settings extends Component {
             </View>   
           }
         </View>
-        <Button
-        title='Signout'
-        onPress={onSignOut}
-        />
+        <Button onPress={onSignOut}>
+          Signout
+        </Button>
       </View>
     )
   }
@@ -111,6 +113,9 @@ export default class Settings extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+  },
+  innerContainer: {
     flex: 1,
     padding: 20,
   },

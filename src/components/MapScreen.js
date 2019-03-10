@@ -193,6 +193,7 @@ export default class App extends React.Component {
         <MapView 
         ref={r => this.mapRef = r}
         style={styles.map} 
+        showsCompass={false}
         showsUserLocation={true}
         showsPointsOfInterest={false}>
           { Object.keys(items).map(this.renderMarker) }
@@ -209,6 +210,7 @@ export default class App extends React.Component {
         style={styles.myLocationFab}
         disabled={!userCoordinates}
         icon="near-me"
+        small
         onPress={this.zoomToUser}
         />
         
@@ -227,17 +229,13 @@ const styles = StyleSheet.create({
   },
   myLocationFab: {
     position: 'absolute',
-    margin: 7,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'white',
+    right: 15,
+    top: 15,
   },
   addItemFab: {
     position: 'absolute',
-    margin: 7,
-    left: 0,
-    bottom: 0,
-    backgroundColor: 'white',
+    right: 15,
+    bottom: 15,
   },
 
   emoji: {

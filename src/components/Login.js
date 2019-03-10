@@ -20,14 +20,13 @@ const Loading = () => (
 )
 export default class Login extends React.Component {
   state={
-    screen: 'signup',
     username: null,
     email: null,
     password: null,
     index: 0,
     routes: [
-      { key: 'login', title: 'Login' },
       { key: 'signup', title: 'Signup' },
+      { key: 'login', title: 'Login' },
     ],
   }
 

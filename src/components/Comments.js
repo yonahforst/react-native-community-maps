@@ -2,13 +2,17 @@ import React from 'react'
 
 import {
   View,
-  Text,
   StyleSheet,
-  TextInput,
-  Button,
   FlatList,
   SafeAreaView,
 } from 'react-native'
+
+import { 
+  Text,
+  Caption,
+  Button,
+  TextInput,
+} from 'react-native-paper';
 
 import {
   placeholders
@@ -78,12 +82,12 @@ export default class Comments extends React.Component {
     } = users[item.userId] || {}
 
     return (
-      <Text style={styles.displayName}>
+      <Caption >
         { username + ': ' }
-        <Text style={styles.body}>
+        <Text>
           {item.body}
         </Text>
-      </Text>
+      </Caption>
     )
   }
 
@@ -110,7 +114,6 @@ export default class Comments extends React.Component {
         <View
         style={styles.newMessageRow}>
           <TextInput
-            multiline
             enablesReturnKeyAutomatically
             style={styles.bodyInput}
             value={body}
@@ -120,10 +123,13 @@ export default class Comments extends React.Component {
             onChangeText={this.onChangeText}
           />
           <Button
-          title='Send'
+          style={styles.sendButton}
+          compact
+          uppercase={false}
           disabled={loading || body.length == 0}
-          onPress={this.onSubmit}
-          />
+          onPress={this.onSubmit}>
+            Send
+          </Button>
         </View>
       </SafeAreaView>
 
@@ -145,8 +151,9 @@ const styles = StyleSheet.create({
   },
   bodyInput: {
     flex: 1,
-    padding: 5, 
-    backgroundColor: 'white',
+  },
+  sendButton: {
+    justifyContent: 'center',
   },
   displayName: {
     fontWeight: 'bold',

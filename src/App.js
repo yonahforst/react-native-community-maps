@@ -33,7 +33,8 @@ const Navigator = createStackNavigator({
     navigationOptions: ({ navigation }) => ({
       header: (
         <Appbar.Header>
-          <Appbar.Action icon='menu' onPress={navigation.getParam('onShowSettings') || noop} />
+        <Appbar.Content />
+          <Appbar.Action icon='settings' onPress={navigation.getParam('onShowSettings') || noop} />
         </Appbar.Header>
       ),
     })
