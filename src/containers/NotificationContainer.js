@@ -28,6 +28,8 @@ const { GeoFirestore } = require('geofirestore')
 const NotificationContext = React.createContext({
   region: {},
   shouldNotify: false,
+  isLoading: false,
+  error: null,
 });
 
 const geofirestore = new GeoFirestore(db);
@@ -85,19 +87,35 @@ export default class NotificationContainer extends React.Component {
   }
 
   setRegion = async region => {
-    const radius = getMetersBetweenPoints(region, {
-      longitude: region.longitude + region.longitudeDelta,
-      latitude: region.latitude + region.latitudeDelta,
+    this.setState({
+      isLoading: true,
     })
 
-    await notificationPreferences.doc(auth.currentUser.uid)
-      .set({
-        region,
-        radius: Math.round(radius),
-      }, {
-        customKey: 'region',
-        merge: true
+    try {
+      const radius = getMetersBetweenPoints(region, {
+        longitude: region.longitude + region.longitudeDelta,
+        latitude: region.latitude + region.latitudeDelta,
       })
+
+      await notificationPreferences.doc(auth.currentUser.uid)
+        .set({
+          region,
+          radius: Math.round(radius),
+        }, {
+          customKey: 'region',
+          merge: true
+        })
+
+        this.setState({
+          isLoading: false,
+          error: null,
+        })
+      } catch (error) {
+        this.setState({
+          isLoading: false,
+          error,
+        })
+      }
   }
 
   openSettings = () => Linking.openURL('app-settings:')
@@ -119,12 +137,26 @@ export default class NotificationContainer extends React.Component {
       }
     }
 
-    await notificationPreferences.doc(auth.currentUser.uid)
-      .set({
-        shouldNotify
-      }, {
-        merge: true
+    this.setState({
+      isLoading: true,
+    })
+    try {
+      await notificationPreferences.doc(auth.currentUser.uid)
+        .set({
+          shouldNotify
+        }, {
+          merge: true
+        })
+      this.setState({
+        isLoading: false,
+        error: null,
       })
+    } catch(e) {
+      this.setState({
+        isLoading: false,
+        error,
+      })
+    }
   }
 
   render() {

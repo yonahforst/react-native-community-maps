@@ -57,6 +57,7 @@ export default class Settings extends Component {
         shouldNotify,
         setRegion,
         setShouldNotify,
+        isLoading,
       },
       auth: {
         onSignOut,
@@ -99,6 +100,7 @@ export default class Settings extends Component {
               pointerEvents='none'
               style={styles.overlay}>
                 <Text>Move to set notification area</Text>
+                { isLoading && <Text>Saving...</Text> }
               </View>
             </View>   
           }
