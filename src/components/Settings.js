@@ -4,13 +4,15 @@ import React, {
 
 import {
   View,
+  Alert,
   StyleSheet,
+  Image,
 } from 'react-native'
 
 import {
   Text,
   Switch,
-  Button,
+  Banner,
 } from 'react-native-paper'
 
 import { 
@@ -20,7 +22,9 @@ import {
 const DELTA = 0.005
 
 export default class Settings extends Component {
-  state={}
+  state={
+    visible: true,
+  }
 
   componentDidMount() {
     const {
@@ -28,7 +32,7 @@ export default class Settings extends Component {
     } = this.props
 
     navigation.setParams({
-      onSave: this.onSave,
+      onMore: this.onMore,
     })
 
     const {
@@ -46,6 +50,65 @@ export default class Settings extends Component {
     })
   }
 
+  onMore = () => {
+    const {
+      showActionSheetWithOptions,
+      auth: {
+        onSignOut,
+        user: {
+          isAnonymous
+        }
+      }
+    } = this.props
+
+    const options = [
+      isAnonymous ? 'Signup' : 'Logout', 
+      'Delete account', 
+      'Cancel'
+    ];
+
+    const destructiveButtonIndex = 1;
+    const cancelButtonIndex = 2;
+  
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+        destructiveButtonIndex,
+      },
+      buttonIndex => {
+        switch (buttonIndex) {
+          case 0:
+            return isAnonymous ? this.onSignUp() : onSignOut()
+          case 1:
+            return this.onDeleteAccount()
+        }
+      },
+    );  
+  }
+
+  onSignUp = () => {
+    this.props.navigation.navigate('ConvertAnonymousUser')
+  }
+
+  onDeleteAccount = () => {
+    const {
+      auth: {
+        onDeleteUser
+      }
+    } = this.props
+     
+    Alert.alert(
+      'Are you sure?',
+      'You can\'t undo this action ',
+      [
+        {text: 'Delete account', onPress: onDeleteUser },
+        {text: 'Cancel', style: 'cancel'},
+      ],
+    )
+    
+  }
+
   render() {
     const {
       userRegion
@@ -60,13 +123,34 @@ export default class Settings extends Component {
         isLoading,
       },
       auth: {
-        onSignOut,
+        user: {
+          isAnonymous,
+        },
       }
     } = this.props
 
     return (
       <View
       style={styles.container}>
+
+        { isAnonymous && 
+          <Banner
+            visible={this.state.visible}
+            actions={[
+              {
+                label: 'Later',
+                onPress: () => this.setState({ visible: false }),
+              },
+              {
+                label: 'Signup',
+                onPress: this.onSignUp,
+              },
+            ]}
+          >
+          { `You're currently signed in as an anonymous user.\nSIGNUP to select a username and password.` }
+          </Banner>
+        }
+
         <View
         style={styles.innerContainer}>
           <View
@@ -105,9 +189,6 @@ export default class Settings extends Component {
             </View>   
           }
         </View>
-        <Button onPress={onSignOut}>
-          Signout
-        </Button>
       </View>
     )
   }

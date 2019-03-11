@@ -38,6 +38,7 @@ export default class AuthContainer extends React.Component {
           this.setState({ 
             user: {
               id: doc.id,
+              isAnonymous: currentUser.isAnonymous,
               ...doc.data(),
             },
             isReady: true, 
@@ -149,7 +150,29 @@ export default class AuthContainer extends React.Component {
     }
   }
 
+  onDeleteUser = async () => {
+    try {
+      this.setState({ 
+        loading: true
+      })
 
+      const user = auth.currentUser
+
+      await db.collection('users').doc(user.uid)
+      await user.delete()
+
+      this.setState({
+        loading: false,
+        error: null,
+      })
+    } catch (error) {
+      console.log(error)
+      this.setState({
+        loading: false,
+        error,
+      })
+    }
+  }
 
   render() {
     const {
@@ -162,17 +185,21 @@ export default class AuthContainer extends React.Component {
 
     if (!user)
       return <Login
-        {...this.state}
-        onSignup={this.onSignup}
-        onLogin={this.onLogin}
-        onAnonymousLogin={this.onAnonymousLogin}
+        auth={{
+          ...this.state,
+          onSignup: this.onSignup,
+          onLogin: this.onLogin,
+          onAnonymousLogin: this.onAnonymousLogin
+        }}
         />
 
     return (
       <AuthContext.Provider value={{
         auth: {
           ...this.state,
+          onSignup: this.onSignup,
           onSignOut: this.onSignOut,
+          onDeleteUser: this.onDeleteUser,
         }
       }}> 
         { this.props.children }

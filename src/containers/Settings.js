@@ -6,10 +6,16 @@ import {
   NotificationContainerHoc
 } from './NotificationContainer'
 
+import {
+  connectActionSheet,
+} from '@expo/react-native-action-sheet';
+
 import Settings from '../components/Settings'
 
 export default AuthContainerHoc(
   NotificationContainerHoc(
-    Settings
+    connectActionSheet(
+      Settings
+    )
   )
 )

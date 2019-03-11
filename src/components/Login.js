@@ -3,56 +3,49 @@ import React from 'react'
 import {
   View,
   StyleSheet,
+  KeyboardAvoidingView,
 } from 'react-native'
 
 import { 
   TextInput,
-  BottomNavigation, 
   ActivityIndicator,
   HelperText,
   Button,
 } from 'react-native-paper'
 
-const Loading = () => (
-  <View style={styles.loading}>
-    <ActivityIndicator />
-  </View>
-)
+
 export default class Login extends React.Component {
   state={
     username: null,
     email: null,
     password: null,
-    index: 0,
-    routes: [
-      { key: 'signup', title: 'Signup' },
-      { key: 'login', title: 'Login' },
-    ],
+    screen: 'signup',
   }
 
-  onLogin = () => this.props.onLogin(this.state)
-  onSignup = () => this.props.onSignup(this.state)
-  onAnonymousLogin = () => this.props.onAnonymousLogin()
+  onLogin = () => this.props.auth.onLogin(this.state)
+  onSignup = () => this.props.auth.onSignup(this.state)
+  onAnonymousLogin = () => this.props.auth.onAnonymousLogin()
 
-  renderScene = ({ route }) => {
+  renderScene = () => {
     const {
-      loading,
-      error,
+      auth: {
+        loading,
+        error,
+      }
     } = this.props
 
     const {
       username,
       email,
       password,
+      screen,
     } = this.state
 
-    switch (route.key) {
+    switch (screen) {
       case 'login':
         return (
-          <View 
-          style={styles.container} 
-          behavior="padding" 
-          enabled>
+          <View
+          style={styles.innerContainer}>
             <TextInput 
             style={styles.input}
             value={email}
@@ -97,9 +90,7 @@ export default class Login extends React.Component {
       case 'signup':
         return (
           <View 
-          style={styles.container} 
-          behavior="padding" 
-          enabled>
+          style={styles.innerContainer}>
             <TextInput 
             style={styles.input}
             value={email}
@@ -151,16 +142,34 @@ export default class Login extends React.Component {
     }
   }
 
-  handleIndexChange = index => this.setState({ index })
-
-
   render() {
+    const {
+      screen
+    } = this.state
+
     return (
-      <BottomNavigation
-        navigationState={this.state}
-        onIndexChange={this.handleIndexChange}
-        renderScene={this.renderScene}
-      />
+      <KeyboardAvoidingView 
+        style={styles.container}
+        behavior="padding" 
+        enabled>
+        { this.renderScene() }
+
+        <View
+        style={styles.buttonGroup}>
+          <Button 
+          style={styles.button}
+          disabled={screen === 'signup'}
+          onPress={() => this.setState({ screen: 'signup' })}>
+          Signup
+          </Button>
+          <Button 
+          style={styles.button}
+          disabled={screen === 'login'}
+          onPress={() => this.setState({ screen: 'login' })}>
+          Login
+          </Button>
+        </View>
+      </KeyboardAvoidingView>
     )
     }
 }
@@ -169,7 +178,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+  },
+  innerContainer: {
+    flex: 1,
     marginHorizontal: 40,
+    justifyContent: 'center',
   },
   input: {
     marginVertical: 10,
@@ -182,5 +195,12 @@ const styles = StyleSheet.create({
     opacity: 0.5,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  buttonGroup: {
+    flexDirection: 'row',
+  },
+  button: {
+    flex: 1,
+    padding: 10,
   }
 })
