@@ -2,7 +2,7 @@ import React from 'react';
 
 import { 
   StyleSheet, 
-  Text, 
+  Alert, 
   View,
   TouchableHighlight,
   ImageBackground,
@@ -12,7 +12,15 @@ import {
   Camera,
   Permissions, 
   Linking,
+  ImagePicker,
 } from 'expo';
+
+import { 
+  IconButton,
+  HelperText,
+  Button,
+  FAB,
+} from 'react-native-paper'
 
 import { 
   MaterialIcons,
@@ -46,6 +54,33 @@ export default class CameraView extends React.Component {
     }
   };
 
+  onSelectImage = async () => {
+    const { 
+      status 
+    } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
+    if (status !== 'granted')
+     return Alert.alert(
+        'Camera roll permissions', 
+        'Oops! We need permission to access your camera roll. Go to settings to enable it',
+        [{ 
+            text: 'Cancel', 
+            type: 'cancel',
+          }, { 
+            text: 'Open Settings', 
+            onPress: () => Linking.openURL('app-settings:'),
+          }]
+      )
+
+    const picture = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+    })
+
+    if (!picture.cancelled)
+      this.setPicture(picture)
+  }
+
   setPicture = picture => {
     this.setState({
       picture,
@@ -68,11 +103,10 @@ export default class CameraView extends React.Component {
       style={styles.container}
       resizeMode='cover'
       source={picture}>
-        <TouchableHighlight 
-        onPress={this.clearPicture}
-        style={[ styles.button, styles.clearPicture ]}>
-          <Text>X</Text>
-        </TouchableHighlight>
+        <FAB
+        style={styles.clearPicture}
+        icon="clear"
+        onPress={this.clearPicture}/> 
       </ImageBackground>
     )
   }
@@ -97,17 +131,26 @@ export default class CameraView extends React.Component {
       pictureSize='Small'
       flashMode={shouldFlash ? 'on' : 'off'}
       ref={ref => this.camera = ref } >
-        <TouchableHighlight 
-        onPress={this.toggleFlash}
-        style={styles.toggleFlash}>
-          <MaterialIcons name={shouldFlash ? 'flash-on' : 'flash-off'} size={24} color="white" />
-        </TouchableHighlight>
 
-        <TouchableHighlight 
-        onPress={this.snap}
-        style={[ styles.button, styles.snapButton ]}>
-          <View/>
-        </TouchableHighlight>
+        <IconButton
+        icon={shouldFlash ? 'flash-on' : 'flash-off'}
+        color='white'
+        size={24}
+        onPress={this.toggleFlash}
+        style={styles.toggleFlash}/>
+
+        <IconButton
+        icon='photo-library'
+        color='white'
+        size={24}
+        onPress={this.onSelectImage}
+        style={styles.selectImage}/>
+
+        <FAB
+        style={styles.snapButton}
+        icon="photo-camera"
+        onPress={this.snap}/>
+
       </Camera>
     )
   }
@@ -128,12 +171,19 @@ export default class CameraView extends React.Component {
     if (!hasCameraPermission)
       return (
         <View style={[ style, styles.cameraAlert ]}>
-          <Text>Oops! We don't have permission to access your camera.</Text> 
-          <TouchableHighlight 
-          style={styles.settingsButton}
+          <HelperText
+          type="error">
+            Oops! We don't have permission to access your camera.
+          </HelperText> 
+          <Button 
           onPress={this.openSettings}>
-            <Text>Open Settings</Text>
-          </TouchableHighlight>
+            Open Settings
+          </Button>
+          
+          <Button 
+          onPress={this.onSelectImage}>
+            Upload a picture from library
+          </Button>
         </View>
       )
     
@@ -155,63 +205,34 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
+
   snapButton: {
     margin: 10,
     backgroundColor: 'red',
-    borderColor: 'white',
-    borderWidth: 2,
   },
 
   toggleFlash: {
     position: 'absolute',
-    top: 10,
-    left: 10,
-    padding: 5,
+    top: 5,
+    left: 5,
+    borderRadius: 25,
+    opacity: 0.7,
+  },
+
+  selectImage: {
+    position: 'absolute',
+    bottom: 5,
+    right: 5,
     borderRadius: 25,
     opacity: 0.7,
   },
 
   clearPicture: {
     margin: 10,
-    backgroundColor: 'white',
-    borderColor: 'white',
-    borderWidth: 2,
-  },
-
-  button: {
-    backgroundColor: 'white',
-    height: 56,
-    width: 56,
-    borderRadius: 28,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 2.5,
-    elevation: 4,
   },
 
   cameraAlert: {
     alignItems: 'center',
     justifyContent: 'center',
   },
-
-  settingsButton: {
-    backgroundColor: 'white',
-    padding: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 2.5,
-    elevation: 4,
-  }
 });
