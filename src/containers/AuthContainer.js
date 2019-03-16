@@ -43,8 +43,8 @@ export default class AuthContainer extends React.Component {
             },
             isReady: true, 
           })
-        })
-    })
+        }, e => console.log('CAUGHT', e))
+      })
   }
 
 

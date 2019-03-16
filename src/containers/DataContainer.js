@@ -61,7 +61,7 @@ export default class DataContainer extends React.Component {
           ...items,
         }
       })
-    })
+    }, e => console.log('CAUGHT', e))
   }
 
   componentWillUnmount() {
@@ -187,7 +187,7 @@ export default class DataContainer extends React.Component {
       this.setState({
         messages
       })
-    })
+    }, e => console.log('CAUGHT', e))
   }
 
   sendMessage = async (id, body) => {

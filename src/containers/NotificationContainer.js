@@ -46,8 +46,8 @@ export default class NotificationContainer extends React.Component {
         // if there's no location data yet, geofirestore won't parse the data from the 
         // nested data document, or whatever it's called. So we do it ourselves.
         this.setState(data.d ? data.d : data)
-      })
-  }
+      }, e => console.log('CAUGHT', e))
+    }
 
   componentWillUnmount() {
     this.unsubscribe && this.unsubscribe()
