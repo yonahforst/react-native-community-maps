@@ -12,6 +12,7 @@ import {
   Caption,
   Button,
   TextInput,
+  List,
 } from 'react-native-paper';
 
 import {
@@ -82,13 +83,12 @@ export default class Comments extends React.Component {
     } = users[item.userId] || {}
 
     return (
-      <Caption >
-        { username + ': ' }
-        <Text>
-          {item.body}
-        </Text>
-      </Caption>
+      <List.Item 
+      style={styles.comment} 
+      title={item.body} 
+      description={username} />
     )
+
   }
 
   render() {
@@ -163,5 +163,8 @@ const styles = StyleSheet.create({
   body: {
     fontWeight: 'normal',
     marginHorizontal: 20,
+  },
+  comment: {
+    padding: 0,
   }
 })

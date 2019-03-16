@@ -9,6 +9,10 @@ import {
   MapView,
 } from 'expo';
 
+import { 
+  HelperText,
+} from 'react-native-paper';
+
 import {
   itemEmoji,
   noEmojiPicker,
@@ -138,6 +142,10 @@ export default class AddItemScreen extends React.Component {
           zoomEnabled={false}
           pitchEnabled={false}
           onRegionChangeComplete={this.onRegionChangeComplete}/>
+          <HelperText 
+          style={styles.text}>
+            Drag the map to adjust location
+          </HelperText>
           <Text 
           style={styles.emoji}
           onPress={this.toggleEmojiPicker}>
@@ -176,4 +184,8 @@ const styles = StyleSheet.create({
   emoji: {
     fontSize: 50,
   },
+  text: {
+    position: 'absolute',
+    top: 0
+  }
 });

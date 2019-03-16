@@ -237,13 +237,12 @@ const styles = StyleSheet.create({
     right: 15,
     bottom: 15,
   },
-
   emoji: {
     fontSize: 30,
     zIndex: 1,
   },
   viewed: {
-    opacity: 0.5,
+    opacity: 0.65,
     zIndex: 0,
   },
 });
