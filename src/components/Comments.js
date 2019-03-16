@@ -114,6 +114,7 @@ export default class Comments extends React.Component {
         <View
         style={styles.newMessageRow}>
           <TextInput
+            mode='none'
             enablesReturnKeyAutomatically
             style={styles.bodyInput}
             value={body}

@@ -14,15 +14,15 @@ import Navigator from './containers/Navigator'
 import theme from './lib/theme'
 
 export default () => (
-  <AuthContainer>
-    <DataContainer>
-      <NotificationContainer>
-        <PaperProvider theme={theme}>
+  <PaperProvider theme={theme}>
+    <AuthContainer>
+      <DataContainer>
+        <NotificationContainer>
           <ActionSheetProvider>
             <Navigator />
           </ActionSheetProvider>
-        </PaperProvider>
-      </NotificationContainer>
-    </DataContainer>
-  </AuthContainer>
+        </NotificationContainer>
+      </DataContainer>
+    </AuthContainer>
+  </PaperProvider>
 )

@@ -4,6 +4,7 @@ import {
   View,
   StyleSheet,
   KeyboardAvoidingView,
+  Platform,
 } from 'react-native'
 
 import { 
@@ -13,6 +14,7 @@ import {
   Button,
 } from 'react-native-paper'
 
+import { Header } from 'react-navigation';
 
 export default class ConvertAnonymouseUser extends React.Component {
   state={
@@ -43,6 +45,7 @@ export default class ConvertAnonymouseUser extends React.Component {
 
     return (
       <KeyboardAvoidingView 
+        keyboardVerticalOffset={ Platform.OS === 'android' ? Header.HEIGHT + 20 : Header.HEIGHT }
         style={styles.container}
         behavior="padding" 
         enabled>
