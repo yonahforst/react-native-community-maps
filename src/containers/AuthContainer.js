@@ -7,15 +7,23 @@ import {
 import { 
   auth,
   db,
+  EmailAuthProvider,
 } from '../lib/firebase'
 
 import Login from '../components/Login'
+
+import wrapInTry from '../lib/wrapInTry'
 
 const AuthContext = React.createContext({
   user: null,
   loading: false,
   error: null,
 });
+
+const validateUsername = username => {
+  if (!/^\w{6,20}$/.test(username))
+    throw new Error('Username must be 6-20 characters. Only letters, numbers, and underscores.')
+}
 
 export default class AuthContainer extends React.Component {
   state = {
@@ -28,6 +36,7 @@ export default class AuthContainer extends React.Component {
     this.unsubscribeAuthState = auth.onAuthStateChanged(currentUser => {
       if (!currentUser) {
         this.setState({
+          user: null,
           isReady: true
         })
         return
@@ -45,6 +54,16 @@ export default class AuthContainer extends React.Component {
           })
         }, e => console.log('CAUGHT', e))
       })
+
+    const wrapWithState = wrapInTry(state => this.setState(state))
+
+    this.onLogin = wrapWithState(this.onLogin)
+    this.onSignup = wrapWithState(this.onSignup)
+    this.onSignOut = wrapWithState(this.onSignOut)
+    this.onDeleteUser = wrapWithState(this.onDeleteUser)
+    this.onSetUsername = wrapWithState(this.onSetUsername)
+    this.onAnonymousLogin = wrapWithState(this.onAnonymousLogin)
+    this.onConvertAnonymousUser = wrapWithState(this.onConvertAnonymousUser)
   }
 
 
@@ -53,125 +72,57 @@ export default class AuthContainer extends React.Component {
     this.unsubscribeUser && this.unsubscribeUser()
     this.unsubscribeAuthState && this.unsubscribeAuthState()
   }
+  
+  onLogin = ({ email, password }) => auth.signInWithEmailAndPassword(email, password)
+  onSignOut = () => auth.signOut()
+  onAnonymousLogin = () => auth.signInAnonymously()
 
   onSignup = async ({ username, email, password }) => {
-    try {
-      this.setState({ 
-        loading: true
-      })
+    validateUsername(username)
 
-      if (!/^\w{6,20}$/.test(username))
-        throw new Error('Username must be 6-20 characters. Only letters, numbers, and underscores.')
+    await auth.createUserWithEmailAndPassword(email, password)
 
-      await auth.createUserWithEmailAndPassword(email, password)
+    const user = auth.currentUser;
 
-      const user = auth.currentUser;
-    
-      await db.collection('users').doc(user.uid).set({
-        username
-      }, {
-        merge: true
-      })
-
-
-      this.setState({
-        loading: false,
-        error: null,
-      })
-    } catch (error) {
-      console.log(error)
-      this.setState({
-        loading: false,
-        error,
-      })
-    }
+    await db.collection('users').doc(user.uid).set({
+      username
+    }, {
+      merge: true
+    })  
   }
 
-  onLogin = async ({ email, password }) => {
-    try {
-      this.setState({ 
-        loading: true
-      })
 
-      await auth.signInWithEmailAndPassword(email, password)
 
-      this.setState({
-        loading: false,
-        error: null,
-      })
-    } catch (error) {
-      console.log(error)
-      this.setState({
-        loading: false,
-        error,
-      })
-    }
+  onConvertAnonymousUser = async ({ username, email, password }) => {
+    validateUsername(username)      
+    var credential = EmailAuthProvider.credential(email, password);
+    await auth.currentUser.linkAndRetrieveDataWithCredential(credential)
+    const user = auth.currentUser;
+  
+    await db.collection('users').doc(user.uid).set({
+      username
+    }, {
+      merge: true
+    })
   }
 
-  onSignOut = async () => {
-    try {
-      this.setState({ 
-        loading: true
-      })
-
-      await auth.signOut()
-
-      this.setState({
-        loading: false,
-        error: null,
-      })
-    } catch (error) {
-      console.log(error)
-      this.setState({
-        loading: false,
-        error,
-      })
-    }
+  onSetUsername = ({ username }) => {
+    validateUsername(username)
+    const user = auth.currentUser;
+  
+    return db.collection('users').doc(user.uid).set({
+      username
+    }, {
+      merge: true
+    })
   }
 
-  onAnonymousLogin = async () => {
-    try {
-      this.setState({ 
-        loading: true
-      })
-
-      await auth.signInAnonymously()
-
-      this.setState({
-        loading: false,
-        error: null,
-      })
-    } catch (error) {
-      console.log(error)
-      this.setState({
-        loading: false,
-        error,
-      })
-    }
-  }
 
   onDeleteUser = async () => {
-    try {
-      this.setState({ 
-        loading: true
-      })
+    const user = auth.currentUser
 
-      const user = auth.currentUser
-
-      await db.collection('users').doc(user.uid)
-      await user.delete()
-
-      this.setState({
-        loading: false,
-        error: null,
-      })
-    } catch (error) {
-      console.log(error)
-      this.setState({
-        loading: false,
-        error,
-      })
-    }
+    await db.collection('users').doc(user.uid)
+    await user.delete()
   }
 
   render() {
@@ -200,6 +151,8 @@ export default class AuthContainer extends React.Component {
           onSignup: this.onSignup,
           onSignOut: this.onSignOut,
           onDeleteUser: this.onDeleteUser,
+          onSetUsername: this.onSetUsername,
+          onConvertAnonymousUser: this.onConvertAnonymousUser,
         }
       }}> 
         { this.props.children }

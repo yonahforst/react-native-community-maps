@@ -21,7 +21,11 @@ export default class ConvertAnonymouseUser extends React.Component {
     password: null,
   }
 
-  onConvert = () => this.props.auth.onConvertAnonymousUser(this.state)
+  onConvert = async () => {
+    const success = await this.props.auth.onConvertAnonymousUser(this.state)
+    if (success)
+      this.props.navigation.goBack()
+  }
 
   render() {
     const {
@@ -76,7 +80,7 @@ export default class ConvertAnonymouseUser extends React.Component {
           <Button
           mode='contained'
           disabled={loading}
-          onPress={this.onSignup}>
+          onPress={this.onConvert}>
           Signup
           </Button>
 
