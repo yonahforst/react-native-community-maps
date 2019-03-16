@@ -155,7 +155,7 @@ export default class Settings extends Component {
         style={styles.innerContainer}>
           <View
           style={styles.optionRow}>
-            <Text>Notify me on new stuff</Text>
+            <Text>Notify me when new stuff is posted</Text>
             <Switch
             onValueChange={setShouldNotify}
             value={shouldNotify} />

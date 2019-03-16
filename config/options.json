@@ -1,7 +1,11 @@
 {
-  "itemEmoji": "🍭",
+  "itemEmoji": "🛋",
   "shareUrl": "https://us-central1-street-stuff-56693.cloudfunctions.net/getItem/{id}",
   "theme": {
-    
+    "dark": true,
+    "colors": {
+      "primary": "#03a9f4",
+      "accent": "#ffeb3b"
+    }
   }
 }
