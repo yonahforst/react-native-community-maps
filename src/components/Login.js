@@ -83,14 +83,7 @@ export default class Login extends React.Component {
             onPress={this.onLogin}>
             Login
             </Button>
-
-            <Button
-            disabled={loading}
-            color='grey'
-            onPress={this.onAnonymousLogin}>
-            Use anonymously
-            </Button>
-
+            
             <ActivityIndicator
             animating={loading} />
           </View>
