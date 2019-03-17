@@ -16,11 +16,20 @@ import {
 
 import { Header } from 'react-navigation';
 
+import UsernameGenerator from '../lib/usernameGenerator'
+
 export default class ConvertAnonymouseUser extends React.Component {
   state={
     username: null,
     email: null,
     password: null,
+    usernamePlaceholder: null,
+  }
+
+  componentDidMount = () => {
+    this.setState({
+      usernamePlaceholder: UsernameGenerator.generate()
+    })
   }
 
   onConvert = async () => {
@@ -41,6 +50,7 @@ export default class ConvertAnonymouseUser extends React.Component {
       username,
       email,
       password,
+      usernamePlaceholder,
     } = this.state
 
     return (
@@ -56,14 +66,15 @@ export default class ConvertAnonymouseUser extends React.Component {
           value={email}
           keyboardType='email-address'
           textContentType='username'
-          placeholder='Email'
+          label='Email'
           onChangeText={email => this.setState({ email })} />
 
           <TextInput 
           style={styles.input}
           value={username}
           textContentType='username'
-          placeholder='Username'
+          placeholder={'e.g. ' + usernamePlaceholder}
+          label='Username'
           onChangeText={username => this.setState({ username })} />
 
           <TextInput 
@@ -71,7 +82,7 @@ export default class ConvertAnonymouseUser extends React.Component {
           style={styles.input}
           value={password}
           textContentType='password'
-          placeholder='Password'
+          label='Password'
           onChangeText={password => this.setState({ password })} />
 
           <HelperText

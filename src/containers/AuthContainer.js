@@ -13,6 +13,7 @@ import {
 import Login from '../components/Login'
 
 import wrapInTry from '../lib/wrapInTry'
+import UsernameGenerator from '../lib/usernameGenerator'
 
 const AuthContext = React.createContext({
   user: null,
@@ -75,7 +76,19 @@ export default class AuthContainer extends React.Component {
   
   onLogin = ({ email, password }) => auth.signInWithEmailAndPassword(email, password)
   onSignOut = () => auth.signOut()
-  onAnonymousLogin = () => auth.signInAnonymously()
+  
+  onAnonymousLogin = async () => {
+    await auth.signInAnonymously()
+
+    const user = auth.currentUser;
+    const username = UsernameGenerator.generate()
+
+    await db.collection('users').doc(user.uid).set({
+      username
+    }, {
+      merge: true
+    })  
+  }
 
   onSignup = async ({ username, email, password }) => {
     validateUsername(username)

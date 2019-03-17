@@ -69,7 +69,10 @@ export default class DataContainer extends React.Component {
   }
 
   loadUsers = async ({ ids }) => {
-    const promises = ids.map(id => db.collection('users').doc(id).get())
+    const existingIds = Object.keys(this.state.users)
+    const uniqueIds = ids.filter((id, index) => ids.indexOf(id) === index)
+    const newIds = uniqueIds.filter(id => existingIds.indexOf(id) === -1)
+    const promises = newIds.map(id => db.collection('users').doc(id).get())
     const results = await Promise.all(promises)
     const users = {}
     results.forEach(r => {

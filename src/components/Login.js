@@ -13,6 +13,7 @@ import {
   Button,
 } from 'react-native-paper'
 
+import UsernameGenerator from '../lib/usernameGenerator'
 
 export default class Login extends React.Component {
   state={
@@ -20,6 +21,13 @@ export default class Login extends React.Component {
     email: null,
     password: null,
     screen: 'signup',
+    usernamePlaceholder: null,
+  }
+
+  componentDidMount = () => {
+    this.setState({
+      usernamePlaceholder: UsernameGenerator.generate()
+    })
   }
 
   onLogin = () => this.props.auth.onLogin(this.state)
@@ -39,6 +47,7 @@ export default class Login extends React.Component {
       email,
       password,
       screen,
+      usernamePlaceholder,
     } = this.state
 
     switch (screen) {
@@ -51,7 +60,7 @@ export default class Login extends React.Component {
             value={email}
             keyboardType='email-address'
             textContentType='username'
-            placeholder='Email'
+            label='Email'
             onChangeText={email => this.setState({ email })} />
 
             <TextInput 
@@ -59,7 +68,7 @@ export default class Login extends React.Component {
             style={styles.input}
             value={password}
             textContentType='password'
-            placeholder='Password'
+            label='Password'
             onChangeText={password => this.setState({ password })} />
 
             <HelperText
@@ -96,14 +105,15 @@ export default class Login extends React.Component {
             value={email}
             keyboardType='email-address'
             textContentType='username'
-            placeholder='Email'
+            label='Email'
             onChangeText={email => this.setState({ email })} />
 
             <TextInput 
             style={styles.input}
             value={username}
             textContentType='username'
-            placeholder='Username'
+            label='Username'
+            placeholder={'e.g. ' + usernamePlaceholder}
             onChangeText={username => this.setState({ username })} />
 
             <TextInput 
@@ -111,7 +121,7 @@ export default class Login extends React.Component {
             style={styles.input}
             value={password}
             textContentType='password'
-            placeholder='Password'
+            label='Password'
             onChangeText={password => this.setState({ password })} />
 
             <HelperText
