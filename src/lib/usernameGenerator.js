@@ -1,128 +1,21 @@
 
+import {
+  randomUsernameGeneratorUrl,
+} from './options'
+
+const random = array => array[Math.floor(Math.random() * array.length)]
+const upcase = str => str.charAt(0).toUpperCase() + str.slice(1)
 export default {
-  generate: () => capitalize(random(noun)) + capitalize(random(adj))
+  generate: async () => {
+    const res = await fetch(randomUsernameGeneratorUrl)
+    const json = await res.json()
+    const name = Array.isArray(json)
+      ? random(json)
+      : json
+    return name
+      .replace(/[^a-z]/gi, ' ')
+      .split(' ')
+      .map(upcase)
+      .join('')
+  }
 }
-
-const random = array => array[Math.floor(Math.random()*array.length)]
-const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1)
-
-const adj = [
-  'chaser',
-  'deerstalker',
-  'falconer',
-  'fisherman',
-  'hawker',
-  'huntress',
-  'huntsman',
-  'pursuer',
-  'sportsman',
-  'stalker',
-  'trapper',
-  'ferreter',
-  'pursuant',
-  'agent',
-  'informer',
-  'prosecutor',
-  'reporter',
-  'sleuth',
-  'spy',
-  'analyst',
-  'bloodhound',
-  'bull',
-  'constable',
-  'cop',
-  'dick',
-  'eavesdropper',
-  'eye',
-  'fed',
-  'fink',
-  'flatfoot',
-  'gumshoe',
-  'nark',
-  'peeper',
-  'roper',
-  'scout',
-  'sergeant',
-  'shadow',
-  'shamus',
-  'shoofly',
-  'snoop',
-  'tail',
-  'birddog',
-  'plainclothes',
-  'slewfoot',
-]
-
-const noun = [
-  'appliance',
-  'bed',
-  'bookcase',
-  'chair',
-  'couch',
-  'desk',
-  'equipment',
-  'goods',
-  'sofa',
-  'table',
-  'appointment',
-  'buffet',
-  'bureau',
-  'cabinet',
-  'chattel',
-  'chest',
-  'commode',
-  'counter',
-  'cupboard',
-  'davenport',
-  'dresser',
-  'effect',
-  'fittings',
-  'furnishing',
-  'highboy',
-  'hutch',
-  'movable',
-  'possession',
-  'sideboard',
-  'stool',
-  'thing',
-  'wardrobe',
-  'accessories',
-  'appointments',
-  'appurtenances',
-  'assets',
-  'baggage',
-  'belongings',
-  'chattels',
-  'effects',
-  'equipment',
-  'estate',
-  'fixtures',
-  'furnishings',
-  'furniture',
-  'goods',
-  'impedimenta',
-  'paraphernalia',
-  'province',
-  'settlement',
-  'tangibles',
-  'territory',
-  'things',
-  'trappings',
-  'tricks',
-  'wealth',
-  'Chair',
-  'Liftchair',
-  'Beanbag',
-  'Chaiselongue',
-  'Fauteuil',
-  'Ottoman',
-  'Recliner',
-  'Stool',
-  'BarStool',
-  'Footstool',
-  'ottoman',
-  'Tuffet',
-  'Faintingcouch',
-  'Rockingchair',
-  'Barchair',
-]

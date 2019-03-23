@@ -26,9 +26,10 @@ export default class ConvertAnonymouseUser extends React.Component {
     usernamePlaceholder: null,
   }
 
-  componentDidMount = () => {
+  componentDidMount = async () => {
+    const usernamePlaceholder = await UsernameGenerator.generate()
     this.setState({
-      usernamePlaceholder: UsernameGenerator.generate()
+      usernamePlaceholder,
     })
   }
 

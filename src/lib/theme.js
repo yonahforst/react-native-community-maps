@@ -1,6 +1,5 @@
 import { 
   DefaultTheme,
-  Provider as PaperProvider, 
 } from 'react-native-paper'
 
 import * as deepmerge from 'deepmerge'
