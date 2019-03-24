@@ -81,7 +81,7 @@ export default class AuthContainer extends React.Component {
     await auth.signInAnonymously()
 
     const user = auth.currentUser;
-    const username = UsernameGenerator.generate()
+    const username = await UsernameGenerator.generate()
 
     await db.collection('users').doc(user.uid).set({
       username
