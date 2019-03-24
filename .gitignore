@@ -7,7 +7,7 @@ npm-debug.*
 *.mobileprovision
 /app.json
 /firebase.json
-/options.json
+/config/options.json
 assets/**/*
 firebase-debug.log
 .firebaserc
