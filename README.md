@@ -1,10 +1,9 @@
 # react-native-community-maps
 Boilerplate app to map (geographically) user uploaded photos.
 
-#### Projects using react-native-community-maps
-[Sofab](https://itunes.apple.com/us/app/sofab/id1455005485)
+![VI2LsXBn6f](https://user-images.githubusercontent.com/1440796/54887040-ce998180-4e8e-11e9-8dca-bf285fc52adc.gif)
 
-![NeNxRQwriK](https://user-images.githubusercontent.com/1440796/54877398-76c33200-4e1e-11e9-9ce7-05f2212aa5c3.gif)
+Create your own app (in minutes!) to map interesting things around your neighborhood. Maybe it's your fav graffiti, or a really nice sofa that needs a new home. Other users are notified in real time and can comment on each post.
 
 ### Get started
 1. Fork and clone this repo
@@ -20,3 +19,7 @@ Boilerplate app to map (geographically) user uploaded photos.
     7. Run `firebase deploy`
 5. Run `expo start`
 
+#### Projects using react-native-community-maps
+[Sofab](https://itunes.apple.com/us/app/sofab/id1455005485)
+
+git
