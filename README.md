@@ -1,5 +1,5 @@
 # react-native-community-maps
-Boilerplate app to map (geographically) user uploaded photos.
+Boilerplate app to geographically map user content
 
 ![VI2LsXBn6f](https://user-images.githubusercontent.com/1440796/54887040-ce998180-4e8e-11e9-8dca-bf285fc52adc.gif)
 
@@ -21,5 +21,3 @@ Create your own app (in minutes!) to map interesting things around your neighbor
 
 #### Projects using react-native-community-maps
 [Sofab](https://itunes.apple.com/us/app/sofab/id1455005485)
-
-git
