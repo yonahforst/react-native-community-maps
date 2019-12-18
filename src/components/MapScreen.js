@@ -19,12 +19,6 @@ import {
   FAB,
 } from 'react-native-paper'
 
-
-import {
-  itemEmoji,
-  userZoomEmoji,
-} from '../lib/options'
-
 const DELTA = 0.001
 
 export default class App extends React.Component {

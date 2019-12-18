@@ -1,10 +1,9 @@
 import options from '../../config/options'
 
 module.exports = {
-  itemEmoji: '🍔',
-  userZoomEmoji: '🙋‍',
+  defaultEmoji: '🍔',
   noEmojiPicker: false,
   randomUsernameGeneratorUrl: 'http://names.drycodes.com/1?separator=space',
-  placeholders: [ 'Say something...' ],
+  newMsgPlaceholder: [ 'Say something...' ],
   ...options,
 }

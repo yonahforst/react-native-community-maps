@@ -16,12 +16,12 @@ import {
 } from 'react-native-paper';
 
 import {
-  placeholders
+  newMsgPlaceholder
 } from '../lib/options'
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
-const randomPlaceholder = () => placeholders[Math.floor(Math.random() * placeholders.length)]
+const randomPlaceholder = () => newMsgPlaceholder[Math.floor(Math.random() * newMsgPlaceholder.length)]
 
 export default class Comments extends React.Component {
   state={

@@ -14,7 +14,7 @@ import {
 } from 'react-native-paper';
 
 import {
-  itemEmoji,
+  defaultEmoji,
   noEmojiPicker,
 } from '../lib/options'
 
@@ -25,7 +25,7 @@ const DELTA = 0.001
 
 export default class AddItemScreen extends React.Component {
   state = {
-    emoji: itemEmoji,
+    emoji: defaultEmoji,
     showEmojiPicker: false,
   }
 
