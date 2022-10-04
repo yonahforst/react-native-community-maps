@@ -12,7 +12,7 @@
     "@babel/runtime": "^7.1.5",
     "@expo/react-native-action-sheet": "^2.1.0",
     "deepmerge": "^3.2.0",
-    "expo": "^31.0.2",
+    "expo": "^46.0.14",
     "firebase": "^5.5.8",
     "geofirestore": "github:geofirestore/geofirestore-js#dev",
     "react": "16.5.0",
